@@ -3,7 +3,6 @@ title: "Hands-on Exercise 1: Geospatial Data Wrangling with R"
 format: html
 author: "Alexander Vincent Lewi"
 date: "6 January 2024"
-date-modified: "`r Sys.Date()`"
 execute: 
   message: false
   warning: false
@@ -149,6 +148,7 @@ glimpse(listings_sf)
 ```
 
 # Geoprocessing
+
 ## Buffering
 
 The scenario:
