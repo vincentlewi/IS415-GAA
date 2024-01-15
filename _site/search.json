@@ -4,7 +4,7 @@
     "href": "In-class_Ex/In-class_Ex02/In-class_Ex02.html",
     "title": "In-class Exercise 2",
     "section": "",
-    "text": "Getting Started\n\n\nImporting Grab-Posisi Dataset\n\n\nConverting into sf tibble Dataframe"
+    "text": "In this in-class exercise, we will use the following packages:\n\narrow\nlubridate\ntidyverse\ntmap\nsf\n\n\n\nLoad the packages\npacman::p_load(arrow, lubridate, tidyverse, tmap, sf)"
   },
   {
     "objectID": "index.html",
@@ -12,5 +12,54 @@
     "title": "IS415-GAA",
     "section": "",
     "text": "Welcome to IS415 Geospatial Analytics and Applications\nThis is the course website of IS415 I study this term. You will find my course work on this website."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#getting-started",
+    "href": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#getting-started",
+    "title": "In-class Exercise 2",
+    "section": "",
+    "text": "In this in-class exercise, we will use the following packages:\n\narrow\nlubridate\ntidyverse\ntmap\nsf\n\n\n\nLoad the packages\npacman::p_load(arrow, lubridate, tidyverse, tmap, sf)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#importing-grab-posisi-dataset",
+    "href": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#importing-grab-posisi-dataset",
+    "title": "In-class Exercise 2",
+    "section": "Importing Grab-Posisi Dataset",
+    "text": "Importing Grab-Posisi Dataset\nWe will use Grab-Posisi dataset. This dataset contains the GPS trajectories of Grab drivers in Singapore.\n\n\nRead the dataset\ndf &lt;- read_parquet(\"data/GrabPosisi/part-00000-8bbff892-97d2-4011-9961-703e38972569.c000.snappy.parquet\")\n\n\nHowever, when we explore the dataset, we notice that the timestamp variable is in a integer format. We need to convert it into a datetime format.\n\n\nConvert the timestamp into datetime\ndf$pingtimestamp &lt;- as_datetime(df$pingtimestamp)\n\n\n\nExtracting trip starting location\nNow, we will retrieve the starting location of each trip. We are also interested to know the day of the week and the hour of the day when the trip started.\n\n\nCode\norigin_df &lt;- df |&gt;\n  group_by(trj_id) |&gt; # Group by trip ID\n  arrange(pingtimestamp) |&gt; # Sort by timestamp\n  filter(row_number() == 1) |&gt; # Get the earliest timestamp\n  mutate(weekday = wday(pingtimestamp,\n                        label = TRUE,\n                        abbr = TRUE),\n         start_hr = hour(pingtimestamp),\n         day = factor(mday(pingtimestamp)))\n\n\n\n\nExtracting trip ending location\nSimilarly, we will also extract the ending location of the trip.\n\n\nCode\ndestination_df &lt;- df |&gt;\n  group_by(trj_id) |&gt; # Group by trip ID\n  arrange(desc(pingtimestamp)) |&gt; # Sort by timestamp in descending order\n  filter(row_number() == 1) |&gt; # Get the last timestamp\n  mutate(weekday = wday(pingtimestamp,\n                        label = TRUE,\n                        abbr = TRUE),\n         end_hr = hour(pingtimestamp),\n         day = factor(mday(pingtimestamp)))"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#converting-into-sf-tibble-dataframe",
+    "href": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#converting-into-sf-tibble-dataframe",
+    "title": "In-class Exercise 2",
+    "section": "Converting into sf tibble dataframe",
+    "text": "Converting into sf tibble dataframe"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#visualizing-tas-point-symbol-map",
+    "href": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#visualizing-tas-point-symbol-map",
+    "title": "In-class Exercise 2",
+    "section": "Visualizing tas Point Symbol Map",
+    "text": "Visualizing tas Point Symbol Map"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#converting-into-sf-tibble-data.frame",
+    "href": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#converting-into-sf-tibble-data.frame",
+    "title": "In-class Exercise 2",
+    "section": "Converting into sf tibble data.frame",
+    "text": "Converting into sf tibble data.frame"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#visualizing-to-point-symbol-map",
+    "href": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#visualizing-to-point-symbol-map",
+    "title": "In-class Exercise 2",
+    "section": "Visualizing to Point Symbol Map",
+    "text": "Visualizing to Point Symbol Map"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#importing-the",
+    "href": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#importing-the",
+    "title": "In-class Exercise 2",
+    "section": "Importing the",
+    "text": "Importing the"
   }
 ]
