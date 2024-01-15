@@ -1,0 +1,15 @@
+---
+title: "In-class Exercise 2"
+format: html
+author: "Alexander Vincent Lewi"
+date: "15 January 2024"
+execute: 
+  message: false
+  warning: false
+---
+
+# Getting Started
+
+# Importing Grab-Posisi Dataset
+
+# Converting into sf tibble Dataframe
