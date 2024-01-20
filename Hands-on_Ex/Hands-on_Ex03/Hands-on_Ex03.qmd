@@ -1,5 +1,5 @@
 ---
-title: "Hands-on Exercise 3A: 1st Order Spatial Point Patterns Analysis Methods"
+title: "Hands-on Exercise 3: 1st and 2nd Order Spatial Point Patterns Analysis Methods"
 format: 
   html:
     toc-depth: 3
