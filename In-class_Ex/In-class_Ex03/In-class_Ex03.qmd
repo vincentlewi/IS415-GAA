@@ -1,0 +1,105 @@
+---
+title: "In-class Exercise 3"
+format: 
+  html:
+    code-fold: true
+    code-summary: "Show code"
+    toc-depth: 3
+author: "Alexander Vincent Lewi"
+date: "22 January 2024"
+execute: 
+  message: false
+  warning: false
+---
+
+## Getting Started
+
+In this in-class exercise, we will use the following packages:
+-  maptools
+-  sf
+-  raster
+-  spatstat
+-  tmap
+-  tidyverse
+
+```{r}
+#| code-summary: Load the packages
+pacman::p_load(maptools, sf, raster, spatstat, tmap, tidyverse)
+```
+
+## Spatial Data Wrangling
+
+### Importing the spatial data
+
+```{r}
+childcare_sf <- st_read("data/ChildCareServices.geojson") |>
+  st_transform(crs = 3414)
+# sg_sf <- st_read(dsn = "data/geospatial", layer="CostalOutline")
+mpsz_sf <- st_read(dsn = "data/geospatial", layer = "MP14_SUBZONE_WEB_PL")
+```
+## Creating coastal outline
+
+We will use the `st_union()` function to create a single polygon from the multiple polygons in the `sg_sf` object.
+```{r}
+sg_sf <- mpsz_sf |> st_union()
+plot(sg_sf)
+```
+
+Different from the `st_union()` function, the `st_combine()` function will create a single multipolygon from the multiple polygons in the `sg_sf` object.
+```{r}
+mpsz_sf |> st_combine() |> plot()
+```
+
+## Geospatial Data Wrangling
+
+### Creating ppp objects: sf method
+
+```{r}
+childcare_ppp <- as.ppp(childcare_sf)
+```
+### Handling duplicated points
+
+We can check the duplication in a ppp object using the `duplicated()` function.
+```{r}
+any(duplicated(childcare_ppp))
+```
+
+### Creating owin objects: sf method
+
+```{r}
+sg_owin <- as.owin(sg_sf) # the input MUST be an sf object
+```
+
+The output can be displayed using the `plot()` function.
+```{r}
+plot(sg_owin)
+```
+
+We can also use the `summary()` function to display the summary of the owin object.
+```{r}
+summary(sg_owin)
+```
+
+#### Combining points of childcare
+
+```{r}
+childcareSG_ppp <- childcare_ppp[sg_owin]
+plot(childcareSG_ppp)
+```
+
+```{r}
+pg <- mpsz_sf |> filter(PLN_AREA_N == "PUNGGOL")
+tm <- mpsz_sf |> filter(PLN_AREA_N == "TAMPINES")
+ck <- mpsz_sf |> filter(PLN_AREA_N == "CHOA CHU KANG")
+jw <- mpsz_sf |> filter(PLN_AREA_N == "JURONG WEST")
+```
+
+```{r}
+plot(pg, main = "Punggol")
+plot(tm, main = "Tampines")
+plot(ck, main = "Choa Chu Kang")
+plot(jw, main = "Jurong West")
+```
+
+
+
