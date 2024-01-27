@@ -10,17 +10,14 @@ date: "22 January 2024"
 execute: 
   message: false
   warning: false
+  freeze: true
 ---
+
+# Review of Hands-on Exercise 3
 
 ## Getting Started
 
-In this in-class exercise, we will use the following packages:
--  maptools
--  sf
--  raster
--  spatstat
--  tmap
--  tidyverse
+In this in-class exercise, we will use the following packages: - maptools - sf - raster - spatstat - tmap - tidyverse
 
 ```{r}
 #| code-summary: Load the packages
@@ -37,15 +34,18 @@ childcare_sf <- st_read("data/ChildCareServices.geojson") |>
 # sg_sf <- st_read(dsn = "data/geospatial", layer="CostalOutline")
 mpsz_sf <- st_read(dsn = "data/geospatial", layer = "MP14_SUBZONE_WEB_PL")
 ```
+
 ## Creating coastal outline
 
 We will use the `st_union()` function to create a single polygon from the multiple polygons in the `sg_sf` object.
+
 ```{r}
 sg_sf <- mpsz_sf |> st_union()
 plot(sg_sf)
 ```
 
 Different from the `st_union()` function, the `st_combine()` function will create a single multipolygon from the multiple polygons in the `sg_sf` object.
+
 ```{r}
 mpsz_sf |> st_combine() |> plot()
 ```
@@ -57,9 +57,11 @@ mpsz_sf |> st_combine() |> plot()
 ```{r}
 childcare_ppp <- as.ppp(childcare_sf)
 ```
+
 ### Handling duplicated points
 
 We can check the duplication in a ppp object using the `duplicated()` function.
+
 ```{r}
 any(duplicated(childcare_ppp))
 ```
@@ -71,11 +73,13 @@ sg_owin <- as.owin(sg_sf) # the input MUST be an sf object
 ```
 
 The output can be displayed using the `plot()` function.
+
 ```{r}
 plot(sg_owin)
 ```
 
 We can also use the `summary()` function to display the summary of the owin object.
+
 ```{r}
 summary(sg_owin)
 ```
@@ -101,5 +105,72 @@ plot(ck, main = "Choa Chu Kang")
 plot(jw, main = "Jurong West")
 ```
 
+# In-class_Ex03
 
+```{r}
+pacman::p_load(sp, spNetwork, tmap, classInt, viridis, tidyverse)
+```
 
+```{r}
+#| code-summary: Load the data
+network <- st_read(dsn = "data/geospatial", layer = "Punggol_st")
+childcare <- st_read(dsn = "data/geospatial", layer = "Punggol_CC")
+```
+
+```{r}
+#| code-summary: Plot the data
+tmap_mode("view")
+tm_shape(childcare) + 
+  tm_dots() +
+  tm_shape(network) +
+  tm_lines()
+tmap_mode("plot")
+```
+
+```{r}
+lixels <- lixelize_lines(network, lx_length = 750, mindist = 375)
+```
+
+```{r}
+samples <- lines_center(lixels)
+```
+
+```{r}
+densities <- nkde(network, # Important
+                  events = childcare,
+                  w = rep(1, nrow(childcare)), # Important
+                  samples = samples, # Important
+                  kernel_name = "quartic",
+                  bw = 300,
+                  div = "bw",
+                  method = "simple",
+                  digits = 1,
+                  tol = 1,
+                  grid_shape = c(1, 1),
+                  max_depth = 0,
+                  agg = 5, # We aggregate the data within 5m radius
+                  sparse = TRUE,
+                  verbose = FALSE)
+```
+
+```{r}
+densities <- as.data.frame(densities)
+```
+
+```{r}
+samples$density <- densities
+lixels$density <- densities
+# rescaling to help the mapping
+samples$density <- samples$density*1000
+lixels$density <- lixels$density*1000
+```
+
+```{r}
+#| code-summary: Plot the data
+tmap_mode("view")
+tm_shape(lixels) + 
+  tm_lines(col = "density") +
+  tm_shape(childcare) +
+  tm_dots()
+tmap_mode("plot")
+```
