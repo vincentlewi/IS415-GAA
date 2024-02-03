@@ -1,0 +1,14 @@
+{
+  "hash": "a55cb3a1128aa8d5666949d38db1cc44",
+  "result": {
+    "markdown": "---\ntitle: \"In-class Exercise 2\"\nformat: \n  html:\n    code-fold: true\n    code-summary: \"Show code\"\n    toc-depth: 3\nauthor: \"Alexander Vincent Lewi\"\ndate: \"15 January 2024\"\nexecute: \n  message: false\n  warning: false\n  freeze: true\n---\n\n\n## Getting Started\n\nIn this in-class exercise, we will use the following packages:\n\n-   arrow\n-   lubridate\n-   tidyverse\n-   tmap\n-   sf\n\n\n::: {.cell}\n\n```{.r .cell-code  code-summary=\"Load the packages\"}\npacman::p_load(arrow, lubridate, tidyverse, tmap, sf)\n```\n:::\n\n\n## Importing Grab-Posisi Dataset\n\nWe will use [Grab-Posisi](https://engineering.grab.com/grab-posisi) dataset. This dataset contains the GPS trajectories of Grab drivers in Singapore.\n\n\n::: {.cell}\n\n```{.r .cell-code  code-summary=\"Read the dataset\"}\ndf <- read_parquet(\"data/GrabPosisi/part-00000-8bbff892-97d2-4011-9961-703e38972569.c000.snappy.parquet\")\n```\n:::\n\n\nHowever, when we explore the dataset, we notice that the timestamp variable is in a integer format. We need to convert it into a datetime format.\n\n\n::: {.cell}\n\n```{.r .cell-code  code-summary=\"Convert the timestamp into datetime\"}\ndf$pingtimestamp <- as_datetime(df$pingtimestamp)\n```\n:::\n\n::: {.cell}\n\n:::\n\n\n### Extracting trip starting location\n\nNow, we will retrieve the starting location of each trip. We are also interested to know the day of the week and the hour of the day when the trip started.\n\n\n::: {.cell}\n\n```{.r .cell-code}\norigin_df <- df |>\n  group_by(trj_id) |> # Group by trip ID\n  arrange(pingtimestamp) |> # Sort by timestamp\n  filter(row_number() == 1) |> # Get the earliest timestamp\n  mutate(weekday = wday(pingtimestamp,\n                        label = TRUE,\n                        abbr = TRUE),\n         start_hr = hour(pingtimestamp),\n         day = factor(mday(pingtimestamp)))\n```\n:::\n\n\n### Extracting trip ending location\n\nSimilarly, we will also extract the ending location of the trip.\n\n\n::: {.cell}\n\n```{.r .cell-code}\ndestination_df <- df |>\n  group_by(trj_id) |> # Group by trip ID\n  arrange(desc(pingtimestamp)) |> # Sort by timestamp in descending order\n  filter(row_number() == 1) |> # Get the last timestamp\n  mutate(weekday = wday(pingtimestamp,\n                        label = TRUE,\n                        abbr = TRUE),\n         end_hr = hour(pingtimestamp),\n         day = factor(mday(pingtimestamp)))\n```\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

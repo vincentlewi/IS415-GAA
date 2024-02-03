@@ -1,0 +1,53 @@
+---
+title: "In-class_Ex04"
+format: 
+  html:
+    code-fold: true
+    code-summary: "Show code"
+    toc-depth: 3
+    code-overflow: "scroll"
+author: "Alexander Vincent Lewi"
+date: "28 January 2024"
+execute: 
+  message: false
+  warning: false
+---
+
+## Imports
+```{r}
+pacman::p_load(sf, spdep, tmap, tidyverse, knitr, GWmodel)
+```
+
+```{r}
+hunan <- st_read(dsn = "data/geospatial", layer = "hunan")
+hunan2012 <- read_csv("data/aspatial/hunan_2012.csv")
+
+hunan <- left_join(hunan, hunan2012) |> select(1:4, 7, 15)
+```
+
+Data must be in point or polygon spatial data frame format.
+```{r}
+hunan_sp <- hunan |> as_Spatial()
+```
+
+```{r}
+gwstat <- gwss(data = hunan_sp, 
+               vars = "GDPPC", # a vector variable names to be summarized
+               bw = 6, # bandwidth used in the weighting function, indicates 6 neighbors
+               kernel = "bisquare", # kernel function
+               adaptive = T, # must match with the bandwith
+               longlat = T) # projected or long lat
+```
+
+
+```{r}
+gdppc_lm <- qtm(gwstat$SDF, "GDPPC_LM")
+gdppc_lsd <- qtm(gwstat$SDF, "GDPPC_LSD")
+gdppc_lvar <- qtm(gwstat$SDF, "GDPPC_LVar")
+gdppc_lske <- qtm(gwstat$SDF, "GDPPC_LSKe")
+gdppc_lcv <- qtm(gwstat$SDF, "GDPPC_LCV")
+
+tmap_arrange(gdppc_lm, gdppc_lsd, gdppc_lvar, gdppc_lske, gdppc_lcv, ncol = 2)
+```
+
+

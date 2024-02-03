@@ -10,6 +10,7 @@ date: "15 January 2024"
 execute: 
   message: false
   warning: false
+  freeze: true
 ---
 
 ## Getting Started
@@ -28,7 +29,9 @@ pacman::p_load(arrow, lubridate, tidyverse, tmap, sf)
 ```
 
 ## Importing Grab-Posisi Dataset
+
 We will use [Grab-Posisi](https://engineering.grab.com/grab-posisi) dataset. This dataset contains the GPS trajectories of Grab drivers in Singapore.
+
 ```{r}
 #| code-summary: Read the dataset
 #| eval: false
@@ -36,6 +39,7 @@ df <- read_parquet("data/GrabPosisi/part-00000-8bbff892-97d2-4011-9961-703e38972
 ```
 
 However, when we explore the dataset, we notice that the timestamp variable is in a integer format. We need to convert it into a datetime format.
+
 ```{r}
 #| code-summary: Convert the timestamp into datetime
 #| eval: false
@@ -49,7 +53,9 @@ write_rds(df, "data/rds/part0.rds")
 ```
 
 ### Extracting trip starting location
+
 Now, we will retrieve the starting location of each trip. We are also interested to know the day of the week and the hour of the day when the trip started.
+
 ```{r}
 #| eval: false
 origin_df <- df |>
@@ -64,7 +70,9 @@ origin_df <- df |>
 ```
 
 ### Extracting trip ending location
+
 Similarly, we will also extract the ending location of the trip.
+
 ```{r}
 #| eval: false
 destination_df <- df |>

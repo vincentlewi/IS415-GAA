@@ -21,7 +21,7 @@ In this in-class exercise, we will use the following packages: - maptools - sf -
 
 ```{r}
 #| code-summary: Load the packages
-pacman::p_load(maptools, sf, raster, spatstat, tmap, tidyverse)
+pacman::p_load(maptools, sf, raster, spatstat, tmap, tidyverse, spNetwork)
 ```
 
 ## Spatial Data Wrangling
@@ -147,14 +147,10 @@ densities <- nkde(network, # Important
                   digits = 1,
                   tol = 1,
                   grid_shape = c(1, 1),
-                  max_depth = 0,
+                  max_depth = 8,
                   agg = 5, # We aggregate the data within 5m radius
                   sparse = TRUE,
                   verbose = FALSE)
-```
-
-```{r}
-densities <- as.data.frame(densities)
 ```
 
 ```{r}
