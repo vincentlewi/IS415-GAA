@@ -1,0 +1,577 @@
+---
+title: "Take-home Exercise 1"
+format: 
+  html:
+    toc-depth: 3
+    code-overflow: "scroll"
+author: "Alexander Vincent Lewi"
+date: "28 January 2024"
+execute: 
+  message: false
+  warning: false
+---
+
+## Background
+
+Advancement of Information and Communication Technology (ICT) has enabled the development of smart cities through the collection of large amounts of data, especially human mobility data. This data contains the movement of human beings in space and time, and can be used to understand the spatial-temporal patterns of human mobility. This understanding can be used to improve the planning of urban infrastructure and services, such as public transport, healthcare, and education.
+
+In Singapore, the [Land Transport Authority (LTA) DataMall](https://datamall.lta.gov.sg/content/datamall/en.html) has made available a number of datasets that can be used to understand the spatial-temporal patterns of human mobility. Two data sets they provide are: Passenger Volume by Origin Destination Train Stations and Passenger Volume by Origin Destination Bus Stops. However, the data is limited by the fact that it only contains the number of passengers that board and alight at each station or bus stop. In 2020, Grab released [Grab Posisi](https://engineering.grab.com/grab-posisi), another very interesting humen mobility dataset that contains the more than 80 million GPS pings and cover over 1 million km.
+
+In this exercise, we will:
+
+-   Using appropriate function of **sf** and **tidyverse**, preparing the following geospatial data layer in sf tibble data.frames:
+
+    -   Grab taxi location points either by origins or destinations.
+
+    -   Road layer within Singapore excluding outer islands.
+
+    -   Singapore boundary layer excluding outer islands
+
+-   Using the extracted data, derive traditional Kernel Density Estimation layers.
+
+-   Using the extracted data, derive either Network Kernel Density Estimation (NKDE) or Temporal Network Kernel Density Estimation (TNKDE)
+
+-   Using appropriate **tmap** functions, display the kernel density layers on openstreetmap of Singapore.
+
+-   Describe the spatial patterns revealed by the kernel density maps.
+
+## Import
+
+### Packages
+
+```{r}
+pacman::p_load(arrow, sf, tidyverse, tmap, spNetwork, spatstat, maptools, raster, classInt, colorspace, gifski)
+```
+
+### Aspatial Data
+
+GPS trajectories dataset obtained from [Grab Posisi](https://engineering.grab.com/grab-posisi)
+
+```{r}
+#| eval: false
+grab <- open_dataset("data/GrabPosisi") |> as_tibble()
+```
+
+### Geospatial Data
+
+Road network dataset obtained from [Geofabrik](https://download.geofabrik.de/) (Malaysia, Singapore, and Brunei coverage).
+
+```{r}
+road_sf <- st_read(dsn = "data/geospatial", layer = "gis_osm_roads_free_1")
+```
+
+[Master Plan 2019 Subzone Boundary (No Sea) from data.gov.sg](https://beta.data.gov.sg/collections/1749/view).
+
+```{r}
+mpsz_sf <- st_read("data/geospatial/MasterPlan2019SubzoneBoundaryNoSeaGEOJSON.geojson")
+```
+
+## Data Preprocessing
+
+### Aspatial Data
+
+#### Converting data type
+
+Before we can perform any spatial analysis, it is important to review the data type of each variable.
+
+```{r}
+#| eval: false
+glimpse(grab)
+```
+
+In this case, we can observe that the `timestamp` variable is in integer format. We will need to convert it to a datetime format using the code below.
+
+```{r}
+#| eval: false
+grab$pingtimestamp <- as_datetime(grab$pingtimestamp)
+```
+
+#### Extracting trip starting and ending location
+
+Now, we will retrieve the starting location of each trip. We are also interested to know the day of the week and the hour of the day when the trip started.
+
+```{r}
+#| eval: false
+origin_grab <- grab |>
+  group_by(trj_id) |> # Group by trip ID
+  arrange(pingtimestamp) |> # Sort by timestamp
+  filter(row_number() == 1) |> # Get the earliest timestamp
+  mutate(weekday = wday(pingtimestamp,
+                        label = TRUE,
+                        abbr = TRUE),
+         start_hr = hour(pingtimestamp),
+         day = factor(mday(pingtimestamp)))
+```
+
+Similarly, we will also extract the ending location of the trip.
+
+```{r}
+#| eval: false
+destination_grab <- grab |>
+  group_by(trj_id) |> # Group by trip ID
+  arrange(desc(pingtimestamp)) |> # Sort by timestamp in descending order
+  filter(row_number() == 1) |> # Get the latest timestamp
+  mutate(weekday = wday(pingtimestamp,
+                        label = TRUE,
+                        abbr = TRUE),
+         start_hr = hour(pingtimestamp),
+         day = factor(mday(pingtimestamp)))
+```
+
+#### Converting aspatial data into geospatial data
+
+```{r}
+#| eval: false
+origin_sf <- st_as_sf(origin_grab,
+                      coords = c("rawlng", "rawlat"),
+                      crs = 4326) |>
+  st_transform(crs = 3414)
+
+destination_sf <- st_as_sf(destination_grab,
+                           coords = c("rawlng", "rawlat"),
+                           crs = 4326) |>
+  st_transform(crs = 3414)
+```
+
+To expedite the data import process for subsequent use, it is adviseable to save the dataset into RDS format.
+
+```{r}
+#| eval: false
+saveRDS(origin_sf, "data/rds/origin_sf.rds")
+saveRDS(destination_sf, "data/rds/destination_sf.rds")
+```
+
+```{r}
+#| code-summary: Load the origin and destination data
+#| echo: false
+origin_sf <- read_rds("data/rds/origin_sf.rds")
+destination_sf <- read_rds("data/rds/destination_sf.rds")
+```
+
+Now we will transform both origin and destination points into ppp format.
+
+```{r}
+origin_ppp <- as.ppp(origin_sf)
+destination_ppp <- as.ppp(destination_sf)
+```
+
+### Geospatial Data
+
+::: panel-tabset
+#### Road Network
+
+```{r}
+st_crs(road_sf)
+```
+
+#### Master Plan Subzone
+
+```{r}
+st_crs(mpsz_sf)
+```
+:::
+
+We can observe that both of the layers are in the same projection system, which is WGS84. However, it is not in the same projection as our grab dataset which is in Singapore's projection of SVY21. Now we will reproject both of the layers into from WGS84 to SVY21.
+
+::: panel-tabset
+#### Road Network
+
+```{r}
+road_sf <- st_transform(road_sf, 3414)
+```
+
+#### Master Plan Subzone
+
+If we reproject `mpsz_sf` straight away, we will get an error message because the layer contains the Z dimension. We will need to remove the Z dimension before we can use `st_transform()`.
+
+```{r}
+mpsz_sf <- st_zm(mpsz_sf, zm = "Z") |> st_transform(3414)
+```
+:::
+
+#### Creating coastal outline
+
+Now, we need to remove the outer islands using the code below.
+
+```{r}
+mpsz_sf <- mpsz_sf |> filter(!grepl("ISLANDS", Description))
+```
+
+We can now get the boundary of the mainland by unioning all the subzones, then convert it into **owin** object for KDE analysis in the next section.
+
+```{r}
+mainland_boundary = mpsz_sf |> st_union()
+mainland_owin <- mainland_boundary |>
+  as_Spatial() |> 
+  as("SpatialPolygons") |> 
+  as("owin")
+
+plot(mainland_owin)
+```
+
+#### Filtering road network
+
+Since the road network consists of Brunei, Malaysia, and Singapore data, we need to filter it to only include roads within the mainland boundary.
+
+```{r}
+#| echo: false
+sg_road <- readRDS("data/rds/sg_road.rds")
+road_classes <- readRDS("data/rds/road_classes.rds")
+sg_road_filtered <- readRDS("data/rds/sg_road_filtered.rds")
+```
+
+```{r}
+#| eval: false
+sg_road <- road_sf |> st_intersection(mainland_boundary)
+```
+
+Now, we need to look into the road types of the network.
+
+```{r}
+#| eval: false
+road_classes <- list()
+for (road_class in unique(sg_road$fclass)){
+  road_classes[[road_class]] <- qtm(sg_road |> filter(sg_road$fclass == road_class)) +
+    tm_layout(main.title = road_class)
+}
+```
+
+```{r}
+tmap_arrange(road_classes)
+```
+
+As you can see, not all of the roads are accessible by cars. Some of them are not for car pickup and drop-off either. So, we need to filter further based on the fclass documentation found in [Geofabrik](https://www.geofabrik.de/data/geofabrik-osm-gis-standard-0.7.pdf).
+
+```{r}
+#| eval: false
+car_roads <- c('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'tertiary', 'tertiary_link', 'residential', 'unclassified')
+
+sg_road_filtered <- sg_road |>
+  filter(sg_road$fclass %in% car_roads)
+```
+
+```{r}
+plot(sg_road_filtered$geometry)
+```
+
+Since this process is time consuming, we should save the dataset into RDS format for subsequent use.
+
+```{r}
+#| eval: false
+saveRDS(sg_road, "data/rds/sg_road.rds")
+saveRDS(road_classes, "data/rds/road_classes.rds")
+saveRDS(sg_road_filtered, "data/rds/sg_road_filtered.rds")
+```
+
+#### Combining point events object and owin object
+
+In the last step of data preprocessnig, we will extract grab taxi location points and combine it with the mainland boundary.
+
+```{r}
+origin_ppp <- origin_ppp[mainland_owin]
+destination_ppp <- destination_ppp[mainland_owin]
+```
+
+## Traditional Kernel Density Estimation
+
+### Rescaling
+
+Since the starting points of each trips are independent of each other, it is more suitable to use either `bw.diggle` or `bw.ppl` as the sigma. However, because we are interested in finding the clusters within the area, we should just use `bw.ppl`. The reason for this is that the `bw.ppl` algorithm excels in generating more accurate values when dealing with patterns primarily composed of tight clusters, whereas `bw.diggle` performs better in identifying a lone tight cluster amidst random noise.
+
+```{r}
+origin_kde <- density(origin_ppp,
+                      sigma=bw.ppl,
+                      edge=TRUE,
+                      kernel="gaussian")
+plot(origin_kde)
+```
+
+Notice that the scale is very small because the default measurement of SVY21 is in meters. To make the density values mode comprehensible, we need to rescale the density values from meter to kilometer using `rescale()`.
+
+```{r}
+origin_ppp_km <- rescale(origin_ppp, 1000, "km")
+origin_kde_km <- density(origin_ppp_km,
+                      sigma=bw.ppl,
+                      edge=TRUE,
+                      kernel="gaussian")
+plot(origin_kde_km)
+```
+
+### Mapping
+
+Create grid object from the KDE output
+
+```{r}
+gridded_kde_origin <- as.SpatialGridDataFrame.im(origin_kde_km)
+origin_kde_raster <- raster(gridded_kde_origin)
+origin_kde_raster
+```
+
+Create raster from the grid object
+
+```{r}
+projection(origin_kde_raster) <- CRS("+init=EPSG:3414 +units=km")
+origin_kde_raster
+```
+
+We can finally plot the raster using **tmap**.
+
+```{r}
+tmap_mode("view")
+tm_basemap("OpenStreetMap") +
+  tm_shape(origin_kde_raster) +
+  tm_raster("v", palette = "OrRd", title="", alpha=0.9)
+tmap_mode("plot")
+```
+
+```{r}
+intensity(origin_ppp_km)
+```
+
+We can observe that there are several clusters, with a particularly strong one in the Changi area.
+
+```{r}
+#| echo: false
+region_boundary <- readRDS('data/rds/region_boundary.rds')
+region_owin <- readRDS('data/rds/region_owin.rds')
+region_road <- readRDS('data/rds/region_road.rds')
+region_origin <- readRDS('data/rds/region_origin.rds')
+region_destination <- readRDS('data/rds/region_destination.rds')
+region_lixel <- readRDS('data/rds/region_lixel.rds')
+region_sample <- readRDS('data/rds/region_sample.rds')
+```
+
+```{r}
+#| eval: false
+regions = c("north", "east", "central", "west")
+region_boundary <- list()
+region_owin <- list()
+region_road <- list()
+region_origin <- list()
+region_destination <- list()
+region_lixel <- list()
+region_sample <- list()
+
+for (region in regions){
+  region_boundary[[region]] <- mpsz_sf |> filter(grepl(paste(toupper(region), 'REGION'), Description)) |> st_union()
+
+  region_owin[[region]] <- region_boundary[[region]]  |>
+    as_Spatial() |>
+    as("SpatialPolygons") |>
+    as("owin")
+
+  region_road[[region]] <- sg_road_filtered |> st_intersection(region_boundary[[region]]) |> st_cast("LINESTRING")
+
+  region_origin[[region]] <- origin_sf |> st_intersection(region_boundary[[region]])
+
+  region_destination[[region]] <- destination_sf |> st_intersection(region_boundary[[region]])
+  
+  region_lixel[[region]] <- lixelize_lines(region_road[[region]], 750, mindist = 350)
+  
+  region_sample[[region]] <- lines_center(region_lixel[[region]])
+}
+```
+
+```{r}
+for (region in names(region_owin)) {
+  print(paste(region, 'intensity:', origin_ppp[region_owin[[region]]] |> rescale(1000, "km") |> intensity()))
+}
+```
+
+As you can see, even though we saw the cluster in Changi as the strongest, central region holds the largest overall intensity.
+
+We can save these areas to expedite our preprocessing step for the next section by saving them into RDS files.
+
+```{r}
+#| eval: false
+saveRDS(region_boundary, "data/rds/region_boundary.rds")
+saveRDS(region_owin, "data/rds/region_owin.rds")
+saveRDS(region_road, "data/rds/region_road.rds")
+saveRDS(region_origin, "data/rds/region_origin.rds")
+saveRDS(region_destination, "data/rds/region_destination.rds")
+saveRDS(region_lixel, "data/rds/region_lixel.rds")
+saveRDS(region_sample, "data/rds/region_sample.rds")
+```
+
+## Network Kernel Density Estimation (NKDE)
+
+### Data Preparation
+
+In this section we will dissect into the Outram area in the Central Region. We will first need to obtain the boundary, road, origin points, lixelized roads, and the sample of the area.
+
+```{r}
+outram_boundary <- mpsz_sf |> filter(grepl('OUTRAM', Description)) |> st_union()
+outram_road <- region_road$central |> st_intersection(outram_boundary) |> st_cast("LINESTRING")
+outram_origin <- region_origin$central |> st_intersection(outram_boundary)
+outram_lixel <- lixelize_lines(outram_road, 750, mindist = 350)
+outram_sample <- lines_center(outram_lixel)
+```
+
+```{r}
+densities_outram <- nkde(outram_road, 
+                  events = outram_origin, 
+                  kernel_name="gaussian", 
+                  samples = outram_sample, 
+                  method = "simple", 
+                  bw = 300, 
+                  div = "bw", 
+                  w = rep(1, nrow(outram_origin)), 
+                  digits = 1, 
+                  tol = 1, 
+                  grid_shape = c(1,1), 
+                  max_depth = 8, 
+                  agg = 5, 
+                  sparse = TRUE, 
+                  verbose = FALSE)
+outram_sample$density <- densities_outram * 1000
+outram_lixel$density <- densities_outram * 1000
+```
+
+### Visualizing the Kernel Density Map
+
+```{r}
+tmap_mode('view')
+tm_basemap("OpenStreetMap") +
+  tm_shape(outram_lixel) +
+    tm_lines(col="density", palette = "Reds", lwd=5) +
+  tm_shape(outram_origin) +
+    tm_dots()+
+  tm_shape(outram_boundary) + 
+    tm_borders()
+tmap_mode('plot')
+```
+
+## Temporal Network Kernel Density Estimation (TNKDE)
+
+### Data Preparation
+
+In this section, we will try to perform TNKDE, specifically on the Changi area. We will first need to obtain the boundary, road, origin points, lixelized roads, and the sample of the area.
+
+```{r}
+changi_boundary <- mpsz_sf |> filter(grepl('CHANGI', Description)) |> st_union()
+changi_road <- region_road$east |> st_intersection(changi_boundary) |> st_cast("LINESTRING")
+changi_origin <- region_origin$east |> st_intersection(changi_boundary)
+changi_lixel <- lixelize_lines(changi_road, 750, mindist = 350)
+changi_sample <- lines_center(changi_lixel)
+```
+
+Afterward, the timestamp field needs to be converted into time, and we are working with a minute-level granularity.
+
+```{r}
+changi_origin$time <- as.POSIXct(hms::as_hms(changi_origin$pingtimestamp))
+start <- as.POSIXct(0)
+changi_origin$time <- as.numeric(difftime(changi_origin$time, start, units='mins'))
+
+
+hours_starts_labs <- as.character(0:23)
+
+hours_starts_num <- difftime(hms::hms(hours = (0:23)), start, units = "mins")
+hours_starts_num <- as.numeric(hours_starts_num)
+```
+
+We can visualize the temporal patterns using `geom_histogram()` from **ggplot** as shown below.
+
+```{r}
+ggplot(changi_origin) +
+  geom_histogram(aes(x = time), color = 'white', bins = 24) + 
+  scale_x_continuous(breaks = hours_starts_num, labels = hours_starts_labs)
+```
+
+We'll determine density values across time for multiple bandwidths, spanning from 60 to 210 minutes, with a 30-minute interval.
+
+```{r}
+w <- rep(1, nrow(changi_origin))
+samples <- seq(0, max(changi_origin$time))
+
+time_kernel_values <- data.frame(
+  bw_60 = tkde(changi_origin$time, w = w, samples = samples, bw = 60, kernel_name = "quartic"),
+  bw_90 = tkde(changi_origin$time, w = w, samples = samples, bw = 90, kernel_name = "quartic"),
+  bw_120 = tkde(changi_origin$time, w = w, samples = samples, bw = 120, kernel_name = "quartic"),
+  bw_150 = tkde(changi_origin$time, w = w, samples = samples, bw = 150, kernel_name = "quartic"),
+  bw_180 = tkde(changi_origin$time, w = w, samples = samples, bw = 180, kernel_name = "quartic"),
+  bw_210 = tkde(changi_origin$time, w = w, samples = samples, bw = 210, kernel_name = "quartic"),
+  time = samples
+)
+```
+
+```{r}
+df_time <- reshape2::melt(time_kernel_values,id.vars = "time")
+df_time$variable <- as.factor(df_time$variable)
+```
+
+```{r}
+ggplot(data = df_time) + 
+  geom_line(aes(x = time, y = value)) + 
+  scale_x_continuous(breaks = hours_starts_num, labels = hours_starts_labs) +
+  facet_wrap(vars(variable), ncol=2, scales = "free") + 
+  theme(axis.text = element_text(size = 5))
+```
+
+It looks like a bandwidth between 90 and 120 capture the bimodal shape of the temporal dimension of the grab pickup locations. From this observation, it seems that we have more flights coming to Singapore between 9 AM to 3 PM.
+
+### Visualizing the Spatio-temporal Pattern
+
+First of all, we need to specify the granularity of the time period that we want to use. We will use 60 minutes, or 1 hour, in this example.
+
+```{r}
+#| eval: false
+sample_time <- seq(0, max(changi_origin$time), 60)
+```
+
+Next, we need to calculate the densities of each time period.
+
+```{r}
+#| eval: false
+tnkde_densities <- tnkde(lines = changi_road,
+                         events = changi_origin,
+                         time_field = "time",
+                         w = rep(1, nrow(changi_origin)), 
+                         samples_loc = changi_sample,
+                         samples_time = sample_time, 
+                         kernel_name = "quartic",
+                         bw_net = 700, bw_time = 60,
+                         adaptive = TRUE,
+                         trim_bw_net = 900,
+                         trim_bw_time = 80,
+                         method = "discontinuous",
+                         div = "bw", max_depth = 10,
+                         digits = 2, tol = 0.01,
+                         agg = 15, grid_shape = c(1,1), 
+                         verbose  = FALSE)
+```
+
+Using `classIntervals()`, we create a palette of 10 color classes for the densities.
+
+```{r}
+#| eval: false
+all_densities <- c(tnkde_densities$k)
+color_breaks <- classIntervals(all_densities, n = 10, style = "kmeans")
+```
+
+Now we can generate the map for each time periodm and generate a **gif** file.
+
+```{r}
+#| eval: false
+all_maps <- lapply(1:ncol(tnkde_densities$k), function(i){
+  time <- hms::hms(minutes = sample_time[[i]])
+  
+  changi_sample$density <- tnkde_densities$k[,i]
+  
+  map1 <- tm_shape(changi_road) +
+    tm_lines(alpha = 0.5) +
+    tm_shape(changi_sample) + 
+    tm_dots(col = "density", size = 0.01, breaks = color_breaks$brks, palette = sequential_hcl(10, 'Inferno'), alpha = 0.5) + 
+    tm_layout(legend.show=FALSE, main.title = as.character(time), main.title.size = 0.5)
+  
+  return(map1)
+})
+
+tmap_animation(all_maps, filename = "gif/changi_origin.gif", 
+               width = 1000, height = 1000, dpi = 300, delay = 50)
+```
+
+Finally, we can display the animated TNKDE.
+
+```{r}
+knitr::include_graphics("gif/changi_origin.gif")
+```
