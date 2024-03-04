@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alexander Vincent Lewi">
+<meta name="dcterms.date" content="2024-03-04">
+
+<title>IS415-GAA - In-class Exercise 6:</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">IS415-GAA</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hands-on-exercise" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Hands-on Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercise">    
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 5</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 6</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-in-class-exercise" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">In-class Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-exercise">    
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex02/In-class_Ex02.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex03/In-class_Ex03.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex04/In-class_Ex04.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex05/In-class_Ex05.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 5</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex06/In-class_Ex06.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 6</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-take-home-exercise" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Take-home Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercise">    
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html" rel="" target="">
+ <span class="dropdown-text">Take-home Exercise 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html" rel="" target="">
+ <span class="dropdown-text">Take-home Exercise 2</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#load-packages" id="toc-load-packages" class="nav-link active" data-scroll-target="#load-packages">Load Packages</a></li>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data">The Data</a></li>
+  <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">Data Wrangling</a></li>
+  <li><a href="#eda" id="toc-eda" class="nav-link" data-scroll-target="#eda">EDA</a></li>
+  <li><a href="#correlation-analysis" id="toc-correlation-analysis" class="nav-link" data-scroll-target="#correlation-analysis">Correlation Analysis</a></li>
+  <li><a href="#hierarchy-cluster-analysis" id="toc-hierarchy-cluster-analysis" class="nav-link" data-scroll-target="#hierarchy-cluster-analysis">Hierarchy Cluster Analysis</a>
+  <ul class="collapse">
+  <li><a href="#data-standardization" id="toc-data-standardization" class="nav-link" data-scroll-target="#data-standardization">Data Standardization</a></li>
+  <li><a href="#computing-proximity-matrix" id="toc-computing-proximity-matrix" class="nav-link" data-scroll-target="#computing-proximity-matrix">Computing proximity matrix</a></li>
+  <li><a href="#computing-hierarchical-clustering" id="toc-computing-hierarchical-clustering" class="nav-link" data-scroll-target="#computing-hierarchical-clustering">Computing hierarchical clustering</a></li>
+  <li><a href="#interpreting-the-dendrograms" id="toc-interpreting-the-dendrograms" class="nav-link" data-scroll-target="#interpreting-the-dendrograms">Interpreting the dendrograms</a></li>
+  <li><a href="#visually-driven-hierarchical-clustering-analysis" id="toc-visually-driven-hierarchical-clustering-analysis" class="nav-link" data-scroll-target="#visually-driven-hierarchical-clustering-analysis">Visually-driven hierarchical clustering analysis</a></li>
+  <li><a href="#mapping-the-clusters-formed" id="toc-mapping-the-clusters-formed" class="nav-link" data-scroll-target="#mapping-the-clusters-formed">Mapping the clusters formed</a></li>
+  </ul></li>
+  <li><a href="#spatially-constrained-clustering-skater-approach" id="toc-spatially-constrained-clustering-skater-approach" class="nav-link" data-scroll-target="#spatially-constrained-clustering-skater-approach"><strong>Spatially Constrained Clustering: SKATER approach</strong></a>
+  <ul class="collapse">
+  <li><a href="#converting-into-spatialpolygonsdataframe" id="toc-converting-into-spatialpolygonsdataframe" class="nav-link" data-scroll-target="#converting-into-spatialpolygonsdataframe"><strong>Converting into SpatialPolygonsDataFrame</strong></a></li>
+  <li><a href="#computing-neighbour-list" id="toc-computing-neighbour-list" class="nav-link" data-scroll-target="#computing-neighbour-list"><strong>Computing Neighbour List</strong></a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">In-class Exercise 6:</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alexander Vincent Lewi </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 4, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="load-packages" class="level2">
+<h2 class="anchored" data-anchor-id="load-packages">Load Packages</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># GDAL is not in CRAN anymore. We are now using the `sp` package.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(spdep, sp, tmap, sf, ClustGeo, ggpubr, cluster, factoextra, NbClust, heatmaply, corrplot, psych, tidyverse, GGally)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="the-data" class="level2">
+<h2 class="anchored" data-anchor-id="the-data">The Data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>shan_ict <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'data/aspatial/Shan-ICT.csv'</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>shan_ict</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 55 × 11
+   `District Pcode` `District Name` `Township Pcode` `Township Name`
+   &lt;chr&gt;            &lt;chr&gt;           &lt;chr&gt;            &lt;chr&gt;          
+ 1 MMR014D001       Taunggyi        MMR014001        Taunggyi       
+ 2 MMR014D001       Taunggyi        MMR014002        Nyaungshwe     
+ 3 MMR014D001       Taunggyi        MMR014003        Hopong         
+ 4 MMR014D001       Taunggyi        MMR014004        Hsihseng       
+ 5 MMR014D001       Taunggyi        MMR014005        Kalaw          
+ 6 MMR014D001       Taunggyi        MMR014006        Pindaya        
+ 7 MMR014D001       Taunggyi        MMR014007        Ywangan        
+ 8 MMR014D001       Taunggyi        MMR014008        Lawksawk       
+ 9 MMR014D001       Taunggyi        MMR014009        Pinlaung       
+10 MMR014D001       Taunggyi        MMR014010        Pekon          
+# ℹ 45 more rows
+# ℹ 7 more variables: `Total households` &lt;dbl&gt;, Radio &lt;dbl&gt;, Television &lt;dbl&gt;,
+#   `Land line phone` &lt;dbl&gt;, `Mobile phone` &lt;dbl&gt;, Computer &lt;dbl&gt;,
+#   `Internet at home` &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>shan <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">'data/geospatial'</span>, <span class="at">layer =</span> <span class="st">'myanmar_township_boundaries'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ST <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Shan (East)"</span>, <span class="st">"Shan (North)"</span>, <span class="st">"Shan (South)"</span>)) <span class="sc">|&gt;</span> <span class="co"># filter only to Shan Province</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">7</span>) <span class="co"># select only the columns we need</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `myanmar_township_boundaries' from data source 
+  `C:\SMU\Y3T2\IS415 Geospatial Analytics and Applications\IS415-GAA\In-class_Ex\In-class_Ex06\data\geospatial' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 330 features and 14 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 92.17275 ymin: 9.671252 xmax: 101.1699 ymax: 28.54554
+Geodetic CRS:  WGS 84</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># checking crs is irrelevant because we are building graphs</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qtm</span>(shan)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="In-class_Ex06_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>shan_sf <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">'data/rds/shan_sf.rds'</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(shan_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 55
+Columns: 119
+$ ST                  &lt;chr&gt; "Shan (North)", "Shan (South)", "Shan (South)", "S…
+$ ST_PCODE            &lt;chr&gt; "MMR015", "MMR014", "MMR014", "MMR014", "MMR015", …
+$ DT.x                &lt;chr&gt; "Mongmit", "Taunggyi", "Taunggyi", "Taunggyi", "Mo…
+$ DT_PCODE.x          &lt;chr&gt; "MMR015D008", "MMR014D001", "MMR014D001", "MMR014D…
+$ TS.x                &lt;chr&gt; "Mongmit", "Pindaya", "Ywangan", "Pinlaung", "Mabe…
+$ TS_PCODE            &lt;chr&gt; "MMR015017", "MMR014006", "MMR014007", "MMR014009"…
+$ DT_PCODE.y          &lt;chr&gt; "MMR015D003", "MMR014D001", "MMR014D001", "MMR014D…
+$ DT.y                &lt;chr&gt; "Kyaukme", "Taunggyi", "Taunggyi", "Taunggyi", "Ky…
+$ TS.y                &lt;chr&gt; "Mongmit", "Pindaya", "Ywangan", "Pinlaung", "Mabe…
+$ TT_HOUSEHOLDS.x     &lt;dbl&gt; 13652, 17544, 18348, 25504, 8632, 41341, 20084, 25…
+$ RADIO.x             &lt;dbl&gt; 3907, 7324, 8890, 5908, 3880, 11607, 6399, 10048, …
+$ TV.x                &lt;dbl&gt; 7565, 8862, 4781, 13816, 6117, 25285, 10762, 16353…
+$ LLPHONE.x           &lt;dbl&gt; 482, 348, 219, 728, 628, 1739, 800, 818, 1239, 112…
+$ MPHONE.x            &lt;dbl&gt; 3559, 2849, 2207, 6363, 3389, 16900, 4315, 8321, 1…
+$ COMPUTER.x          &lt;dbl&gt; 166, 226, 81, 351, 142, 1225, 381, 565, 508, 878, …
+$ INTERNET.x          &lt;dbl&gt; 321, 136, 152, 737, 165, 1741, 316, 556, 1216, 936…
+$ RADIO_PR.x          &lt;dbl&gt; 286.18517, 417.46466, 484.52147, 231.64994, 449.49…
+$ TV_PR.x             &lt;dbl&gt; 554.1313, 505.1300, 260.5734, 541.7189, 708.6423, …
+$ LLPHONE_PR.x        &lt;dbl&gt; 35.306182, 19.835841, 11.935906, 28.544542, 72.752…
+$ MPHONE_PR.x         &lt;dbl&gt; 260.69440, 162.39170, 120.28559, 249.49028, 392.60…
+$ COMPUTER_PR.x       &lt;dbl&gt; 12.159391, 12.881897, 4.414650, 13.762547, 16.4504…
+$ INTERNET_PR.x       &lt;dbl&gt; 23.513038, 7.751938, 8.284282, 28.897428, 19.11492…
+$ DT_PCODE.x.x        &lt;chr&gt; "MMR015D003", "MMR014D001", "MMR014D001", "MMR014D…
+$ DT.x.x              &lt;chr&gt; "Kyaukme", "Taunggyi", "Taunggyi", "Taunggyi", "Ky…
+$ TS.x.x              &lt;chr&gt; "Mongmit", "Pindaya", "Ywangan", "Pinlaung", "Mabe…
+$ TT_HOUSEHOLDS.y     &lt;dbl&gt; 13652, 17544, 18348, 25504, 8632, 41341, 20084, 25…
+$ RADIO.y             &lt;dbl&gt; 3907, 7324, 8890, 5908, 3880, 11607, 6399, 10048, …
+$ TV.y                &lt;dbl&gt; 7565, 8862, 4781, 13816, 6117, 25285, 10762, 16353…
+$ LLPHONE.y           &lt;dbl&gt; 482, 348, 219, 728, 628, 1739, 800, 818, 1239, 112…
+$ MPHONE.y            &lt;dbl&gt; 3559, 2849, 2207, 6363, 3389, 16900, 4315, 8321, 1…
+$ COMPUTER.y          &lt;dbl&gt; 166, 226, 81, 351, 142, 1225, 381, 565, 508, 878, …
+$ INTERNET.y          &lt;dbl&gt; 321, 136, 152, 737, 165, 1741, 316, 556, 1216, 936…
+$ RADIO_PR.y          &lt;dbl&gt; 286.18517, 417.46466, 484.52147, 231.64994, 449.49…
+$ TV_PR.y             &lt;dbl&gt; 554.1313, 505.1300, 260.5734, 541.7189, 708.6423, …
+$ LLPHONE_PR.y        &lt;dbl&gt; 35.306182, 19.835841, 11.935906, 28.544542, 72.752…
+$ MPHONE_PR.y         &lt;dbl&gt; 260.69440, 162.39170, 120.28559, 249.49028, 392.60…
+$ COMPUTER_PR.y       &lt;dbl&gt; 12.159391, 12.881897, 4.414650, 13.762547, 16.4504…
+$ INTERNET_PR.y       &lt;dbl&gt; 23.513038, 7.751938, 8.284282, 28.897428, 19.11492…
+$ DT_PCODE.y.y        &lt;chr&gt; "MMR015D003", "MMR014D001", "MMR014D001", "MMR014D…
+$ DT.y.y              &lt;chr&gt; "Kyaukme", "Taunggyi", "Taunggyi", "Taunggyi", "Ky…
+$ TS.y.y              &lt;chr&gt; "Mongmit", "Pindaya", "Ywangan", "Pinlaung", "Mabe…
+$ TT_HOUSEHOLDS.x.x   &lt;dbl&gt; 13652, 17544, 18348, 25504, 8632, 41341, 20084, 25…
+$ RADIO.x.x           &lt;dbl&gt; 3907, 7324, 8890, 5908, 3880, 11607, 6399, 10048, …
+$ TV.x.x              &lt;dbl&gt; 7565, 8862, 4781, 13816, 6117, 25285, 10762, 16353…
+$ LLPHONE.x.x         &lt;dbl&gt; 482, 348, 219, 728, 628, 1739, 800, 818, 1239, 112…
+$ MPHONE.x.x          &lt;dbl&gt; 3559, 2849, 2207, 6363, 3389, 16900, 4315, 8321, 1…
+$ COMPUTER.x.x        &lt;dbl&gt; 166, 226, 81, 351, 142, 1225, 381, 565, 508, 878, …
+$ INTERNET.x.x        &lt;dbl&gt; 321, 136, 152, 737, 165, 1741, 316, 556, 1216, 936…
+$ RADIO_PR.x.x        &lt;dbl&gt; 286.18517, 417.46466, 484.52147, 231.64994, 449.49…
+$ TV_PR.x.x           &lt;dbl&gt; 554.1313, 505.1300, 260.5734, 541.7189, 708.6423, …
+$ LLPHONE_PR.x.x      &lt;dbl&gt; 35.306182, 19.835841, 11.935906, 28.544542, 72.752…
+$ MPHONE_PR.x.x       &lt;dbl&gt; 260.69440, 162.39170, 120.28559, 249.49028, 392.60…
+$ COMPUTER_PR.x.x     &lt;dbl&gt; 12.159391, 12.881897, 4.414650, 13.762547, 16.4504…
+$ INTERNET_PR.x.x     &lt;dbl&gt; 23.513038, 7.751938, 8.284282, 28.897428, 19.11492…
+$ DT_PCODE.x.x.x      &lt;chr&gt; "MMR015D003", "MMR014D001", "MMR014D001", "MMR014D…
+$ DT.x.x.x            &lt;chr&gt; "Kyaukme", "Taunggyi", "Taunggyi", "Taunggyi", "Ky…
+$ TS.x.x.x            &lt;chr&gt; "Mongmit", "Pindaya", "Ywangan", "Pinlaung", "Mabe…
+$ TT_HOUSEHOLDS.y.y   &lt;dbl&gt; 13652, 17544, 18348, 25504, 8632, 41341, 20084, 25…
+$ RADIO.y.y           &lt;dbl&gt; 3907, 7324, 8890, 5908, 3880, 11607, 6399, 10048, …
+$ TV.y.y              &lt;dbl&gt; 7565, 8862, 4781, 13816, 6117, 25285, 10762, 16353…
+$ LLPHONE.y.y         &lt;dbl&gt; 482, 348, 219, 728, 628, 1739, 800, 818, 1239, 112…
+$ MPHONE.y.y          &lt;dbl&gt; 3559, 2849, 2207, 6363, 3389, 16900, 4315, 8321, 1…
+$ COMPUTER.y.y        &lt;dbl&gt; 166, 226, 81, 351, 142, 1225, 381, 565, 508, 878, …
+$ INTERNET.y.y        &lt;dbl&gt; 321, 136, 152, 737, 165, 1741, 316, 556, 1216, 936…
+$ RADIO_PR.y.y        &lt;dbl&gt; 286.18517, 417.46466, 484.52147, 231.64994, 449.49…
+$ TV_PR.y.y           &lt;dbl&gt; 554.1313, 505.1300, 260.5734, 541.7189, 708.6423, …
+$ LLPHONE_PR.y.y      &lt;dbl&gt; 35.306182, 19.835841, 11.935906, 28.544542, 72.752…
+$ MPHONE_PR.y.y       &lt;dbl&gt; 260.69440, 162.39170, 120.28559, 249.49028, 392.60…
+$ COMPUTER_PR.y.y     &lt;dbl&gt; 12.159391, 12.881897, 4.414650, 13.762547, 16.4504…
+$ INTERNET_PR.y.y     &lt;dbl&gt; 23.513038, 7.751938, 8.284282, 28.897428, 19.11492…
+$ DT_PCODE.y.y.y      &lt;chr&gt; "MMR015D003", "MMR014D001", "MMR014D001", "MMR014D…
+$ DT.y.y.y            &lt;chr&gt; "Kyaukme", "Taunggyi", "Taunggyi", "Taunggyi", "Ky…
+$ TS.y.y.y            &lt;chr&gt; "Mongmit", "Pindaya", "Ywangan", "Pinlaung", "Mabe…
+$ TT_HOUSEHOLDS.x.x.x &lt;dbl&gt; 13652, 17544, 18348, 25504, 8632, 41341, 20084, 25…
+$ RADIO.x.x.x         &lt;dbl&gt; 3907, 7324, 8890, 5908, 3880, 11607, 6399, 10048, …
+$ TV.x.x.x            &lt;dbl&gt; 7565, 8862, 4781, 13816, 6117, 25285, 10762, 16353…
+$ LLPHONE.x.x.x       &lt;dbl&gt; 482, 348, 219, 728, 628, 1739, 800, 818, 1239, 112…
+$ MPHONE.x.x.x        &lt;dbl&gt; 3559, 2849, 2207, 6363, 3389, 16900, 4315, 8321, 1…
+$ COMPUTER.x.x.x      &lt;dbl&gt; 166, 226, 81, 351, 142, 1225, 381, 565, 508, 878, …
+$ INTERNET.x.x.x      &lt;dbl&gt; 321, 136, 152, 737, 165, 1741, 316, 556, 1216, 936…
+$ RADIO_PR.x.x.x      &lt;dbl&gt; 286.18517, 417.46466, 484.52147, 231.64994, 449.49…
+$ TV_PR.x.x.x         &lt;dbl&gt; 554.1313, 505.1300, 260.5734, 541.7189, 708.6423, …
+$ LLPHONE_PR.x.x.x    &lt;dbl&gt; 35.306182, 19.835841, 11.935906, 28.544542, 72.752…
+$ MPHONE_PR.x.x.x     &lt;dbl&gt; 260.69440, 162.39170, 120.28559, 249.49028, 392.60…
+$ COMPUTER_PR.x.x.x   &lt;dbl&gt; 12.159391, 12.881897, 4.414650, 13.762547, 16.4504…
+$ INTERNET_PR.x.x.x   &lt;dbl&gt; 23.513038, 7.751938, 8.284282, 28.897428, 19.11492…
+$ DT_PCODE.x.x.x.x    &lt;chr&gt; "MMR015D003", "MMR014D001", "MMR014D001", "MMR014D…
+$ DT.x.x.x.x          &lt;chr&gt; "Kyaukme", "Taunggyi", "Taunggyi", "Taunggyi", "Ky…
+$ TS.x.x.x.x          &lt;chr&gt; "Mongmit", "Pindaya", "Ywangan", "Pinlaung", "Mabe…
+$ TT_HOUSEHOLDS.y.y.y &lt;dbl&gt; 13652, 17544, 18348, 25504, 8632, 41341, 20084, 25…
+$ RADIO.y.y.y         &lt;dbl&gt; 3907, 7324, 8890, 5908, 3880, 11607, 6399, 10048, …
+$ TV.y.y.y            &lt;dbl&gt; 7565, 8862, 4781, 13816, 6117, 25285, 10762, 16353…
+$ LLPHONE.y.y.y       &lt;dbl&gt; 482, 348, 219, 728, 628, 1739, 800, 818, 1239, 112…
+$ MPHONE.y.y.y        &lt;dbl&gt; 3559, 2849, 2207, 6363, 3389, 16900, 4315, 8321, 1…
+$ COMPUTER.y.y.y      &lt;dbl&gt; 166, 226, 81, 351, 142, 1225, 381, 565, 508, 878, …
+$ INTERNET.y.y.y      &lt;dbl&gt; 321, 136, 152, 737, 165, 1741, 316, 556, 1216, 936…
+$ RADIO_PR.y.y.y      &lt;dbl&gt; 286.18517, 417.46466, 484.52147, 231.64994, 449.49…
+$ TV_PR.y.y.y         &lt;dbl&gt; 554.1313, 505.1300, 260.5734, 541.7189, 708.6423, …
+$ LLPHONE_PR.y.y.y    &lt;dbl&gt; 35.306182, 19.835841, 11.935906, 28.544542, 72.752…
+$ MPHONE_PR.y.y.y     &lt;dbl&gt; 260.69440, 162.39170, 120.28559, 249.49028, 392.60…
+$ COMPUTER_PR.y.y.y   &lt;dbl&gt; 12.159391, 12.881897, 4.414650, 13.762547, 16.4504…
+$ INTERNET_PR.y.y.y   &lt;dbl&gt; 23.513038, 7.751938, 8.284282, 28.897428, 19.11492…
+$ DT_PCODE.y.y.y.y    &lt;chr&gt; "MMR015D003", "MMR014D001", "MMR014D001", "MMR014D…
+$ DT.y.y.y.y          &lt;chr&gt; "Kyaukme", "Taunggyi", "Taunggyi", "Taunggyi", "Ky…
+$ TS.y.y.y.y          &lt;chr&gt; "Mongmit", "Pindaya", "Ywangan", "Pinlaung", "Mabe…
+$ TT_HOUSEHOLDS       &lt;dbl&gt; 13652, 17544, 18348, 25504, 8632, 41341, 20084, 25…
+$ RADIO               &lt;dbl&gt; 3907, 7324, 8890, 5908, 3880, 11607, 6399, 10048, …
+$ TV                  &lt;dbl&gt; 7565, 8862, 4781, 13816, 6117, 25285, 10762, 16353…
+$ LLPHONE             &lt;dbl&gt; 482, 348, 219, 728, 628, 1739, 800, 818, 1239, 112…
+$ MPHONE              &lt;dbl&gt; 3559, 2849, 2207, 6363, 3389, 16900, 4315, 8321, 1…
+$ COMPUTER            &lt;dbl&gt; 166, 226, 81, 351, 142, 1225, 381, 565, 508, 878, …
+$ INTERNET            &lt;dbl&gt; 321, 136, 152, 737, 165, 1741, 316, 556, 1216, 936…
+$ RADIO_PR            &lt;dbl&gt; 286.18517, 417.46466, 484.52147, 231.64994, 449.49…
+$ TV_PR               &lt;dbl&gt; 554.1313, 505.1300, 260.5734, 541.7189, 708.6423, …
+$ LLPHONE_PR          &lt;dbl&gt; 35.306182, 19.835841, 11.935906, 28.544542, 72.752…
+$ MPHONE_PR           &lt;dbl&gt; 260.69440, 162.39170, 120.28559, 249.49028, 392.60…
+$ COMPUTER_PR         &lt;dbl&gt; 12.159391, 12.881897, 4.414650, 13.762547, 16.4504…
+$ INTERNET_PR         &lt;dbl&gt; 23.513038, 7.751938, 8.284282, 28.897428, 19.11492…
+$ geometry            &lt;MULTIPOLYGON [°]&gt; MULTIPOLYGON (((96.96001 23..., MULTI…</code></pre>
+</div>
+</div>
+</section>
+<section id="data-wrangling" class="level2">
+<h2 class="anchored" data-anchor-id="data-wrangling">Data Wrangling</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ict_derived <span class="ot">&lt;-</span> shan_ict <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">RADIO_PR</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Radio</span><span class="st">`</span><span class="sc">/</span><span class="st">`</span><span class="at">Total households</span><span class="st">`</span><span class="sc">*</span><span class="dv">1000</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">TV_PR</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Television</span><span class="st">`</span><span class="sc">/</span><span class="st">`</span><span class="at">Total households</span><span class="st">`</span><span class="sc">*</span><span class="dv">1000</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">LLPHONE_PR</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Land line phone</span><span class="st">`</span><span class="sc">/</span><span class="st">`</span><span class="at">Total households</span><span class="st">`</span><span class="sc">*</span><span class="dv">1000</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">MPHONE_PR</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Mobile phone</span><span class="st">`</span><span class="sc">/</span><span class="st">`</span><span class="at">Total households</span><span class="st">`</span><span class="sc">*</span><span class="dv">1000</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">COMPUTER_PR</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Computer</span><span class="st">`</span><span class="sc">/</span><span class="st">`</span><span class="at">Total households</span><span class="st">`</span><span class="sc">*</span><span class="dv">1000</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">INTERNET_PR</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Internet at home</span><span class="st">`</span><span class="sc">/</span><span class="st">`</span><span class="at">Total households</span><span class="st">`</span><span class="sc">*</span><span class="dv">1000</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">`</span><span class="at">DT_PCODE</span><span class="st">`</span> <span class="ot">=</span><span class="st">`</span><span class="at">District Pcode</span><span class="st">`</span>,<span class="st">`</span><span class="at">DT</span><span class="st">`</span><span class="ot">=</span><span class="st">`</span><span class="at">District Name</span><span class="st">`</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">TS_PCODE</span><span class="st">`</span><span class="ot">=</span><span class="st">`</span><span class="at">Township Pcode</span><span class="st">`</span>, <span class="st">`</span><span class="at">TS</span><span class="st">`</span><span class="ot">=</span><span class="st">`</span><span class="at">Township Name</span><span class="st">`</span>,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">TT_HOUSEHOLDS</span><span class="st">`</span><span class="ot">=</span><span class="st">`</span><span class="at">Total households</span><span class="st">`</span>,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">RADIO</span><span class="st">`</span><span class="ot">=</span><span class="st">`</span><span class="at">Radio</span><span class="st">`</span>, <span class="st">`</span><span class="at">TV</span><span class="st">`</span><span class="ot">=</span><span class="st">`</span><span class="at">Television</span><span class="st">`</span>, </span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">LLPHONE</span><span class="st">`</span><span class="ot">=</span><span class="st">`</span><span class="at">Land line phone</span><span class="st">`</span>, <span class="st">`</span><span class="at">MPHONE</span><span class="st">`</span><span class="ot">=</span><span class="st">`</span><span class="at">Mobile phone</span><span class="st">`</span>,</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">COMPUTER</span><span class="st">`</span><span class="ot">=</span><span class="st">`</span><span class="at">Computer</span><span class="st">`</span>, <span class="st">`</span><span class="at">INTERNET</span><span class="st">`</span><span class="ot">=</span><span class="st">`</span><span class="at">Internet at home</span><span class="st">`</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>shan_sf <span class="ot">&lt;-</span> <span class="fu">left_join</span>(shan_sf, ict_derived, <span class="at">by=</span><span class="fu">c</span>(<span class="st">"TS_PCODE"</span> <span class="ot">=</span> <span class="st">"TS_PCODE"</span>)) <span class="co">#in reality you dont need the by statement as the name of the column is the same</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># if you want to combine the data, it is recommended to do the spatial in the beginning for left_join</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(shan_sf, <span class="st">'data/rds/shan_sf.rds'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>shan_sf <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">'data/rds/shan_sf.rds'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="eda" class="level2">
+<h2 class="anchored" data-anchor-id="eda">EDA</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#build a lot of histograms together</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>radio <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>ict_derived, </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x=</span> RADIO_PR)) <span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">20</span>, </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color=</span><span class="st">"black"</span>, </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill=</span><span class="st">"light blue"</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>tv <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>ict_derived, </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x=</span> TV_PR)) <span class="sc">+</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">20</span>, </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color=</span><span class="st">"black"</span>, </span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill=</span><span class="st">"light blue"</span>)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>llphone <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>ict_derived, </span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x=</span> LLPHONE_PR)) <span class="sc">+</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">20</span>, </span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color=</span><span class="st">"black"</span>, </span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill=</span><span class="st">"light blue"</span>)</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>mphone <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>ict_derived, </span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x=</span> MPHONE_PR)) <span class="sc">+</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">20</span>, </span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color=</span><span class="st">"black"</span>, </span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill=</span><span class="st">"light blue"</span>)</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>computer <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>ict_derived, </span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x=</span> COMPUTER_PR)) <span class="sc">+</span></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">20</span>, </span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color=</span><span class="st">"black"</span>, </span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill=</span><span class="st">"light blue"</span>)</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>internet <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>ict_derived, </span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x=</span> INTERNET_PR)) <span class="sc">+</span></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">20</span>, </span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color=</span><span class="st">"black"</span>, </span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill=</span><span class="st">"light blue"</span>)</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a><span class="fu">ggarrange</span>(radio, tv, llphone, mphone, computer, internet, </span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>          <span class="at">ncol =</span> <span class="dv">3</span>, </span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>          <span class="at">nrow =</span> <span class="dv">2</span>) <span class="co"># to combine the graphs together</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="In-class_Ex06_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="correlation-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="correlation-analysis">Correlation Analysis</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>cluster_vars.cor <span class="ot">=</span> <span class="fu">cor</span>(ict_derived[,<span class="dv">12</span><span class="sc">:</span><span class="dv">17</span>])</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot.mixed</span>(cluster_vars.cor,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">lower =</span> <span class="st">"ellipse"</span>, </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">upper =</span> <span class="st">"number"</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">tl.pos =</span> <span class="st">"lt"</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">diag =</span> <span class="st">"l"</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">tl.col =</span> <span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="In-class_Ex06_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="hierarchy-cluster-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="hierarchy-cluster-analysis">Hierarchy Cluster Analysis</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>cluster_vars <span class="ot">&lt;-</span> shan_sf <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_set_geometry</span>(<span class="cn">NULL</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">"TS.x"</span>, <span class="st">"RADIO_PR"</span>, <span class="st">"TV_PR"</span>, <span class="st">"LLPHONE_PR"</span>, <span class="st">"MPHONE_PR"</span>, <span class="st">"COMPUTER_PR"</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cluster_vars,<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        TS.x RADIO_PR    TV_PR LLPHONE_PR MPHONE_PR COMPUTER_PR
+1    Mongmit 286.1852 554.1313   35.30618  260.6944    12.15939
+2    Pindaya 417.4647 505.1300   19.83584  162.3917    12.88190
+3    Ywangan 484.5215 260.5734   11.93591  120.2856     4.41465
+4   Pinlaung 231.6499 541.7189   28.54454  249.4903    13.76255
+5     Mabein 449.4903 708.6423   72.75255  392.6089    16.45042
+6      Kalaw 280.7624 611.6204   42.06478  408.7951    29.63160
+7      Pekon 318.6118 535.8494   39.83270  214.8476    18.97032
+8   Lawksawk 387.1017 630.0035   31.51366  320.5686    21.76677
+9  Nawnghkio 349.3359 547.9456   38.44960  323.0201    15.76465
+10   Kyaukme 210.9548 601.1773   39.58267  372.4930    30.94709</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(cluster_vars) <span class="ot">&lt;-</span> cluster_vars<span class="sc">$</span><span class="st">"TS.x"</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cluster_vars,<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               TS.x RADIO_PR    TV_PR LLPHONE_PR MPHONE_PR COMPUTER_PR
+Mongmit     Mongmit 286.1852 554.1313   35.30618  260.6944    12.15939
+Pindaya     Pindaya 417.4647 505.1300   19.83584  162.3917    12.88190
+Ywangan     Ywangan 484.5215 260.5734   11.93591  120.2856     4.41465
+Pinlaung   Pinlaung 231.6499 541.7189   28.54454  249.4903    13.76255
+Mabein       Mabein 449.4903 708.6423   72.75255  392.6089    16.45042
+Kalaw         Kalaw 280.7624 611.6204   42.06478  408.7951    29.63160
+Pekon         Pekon 318.6118 535.8494   39.83270  214.8476    18.97032
+Lawksawk   Lawksawk 387.1017 630.0035   31.51366  320.5686    21.76677
+Nawnghkio Nawnghkio 349.3359 547.9456   38.44960  323.0201    15.76465
+Kyaukme     Kyaukme 210.9548 601.1773   39.58267  372.4930    30.94709</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>shan_ict <span class="ot">&lt;-</span> <span class="fu">select</span>(cluster_vars, <span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>))</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(shan_ict, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          RADIO_PR    TV_PR LLPHONE_PR MPHONE_PR COMPUTER_PR
+Mongmit   286.1852 554.1313   35.30618  260.6944    12.15939
+Pindaya   417.4647 505.1300   19.83584  162.3917    12.88190
+Ywangan   484.5215 260.5734   11.93591  120.2856     4.41465
+Pinlaung  231.6499 541.7189   28.54454  249.4903    13.76255
+Mabein    449.4903 708.6423   72.75255  392.6089    16.45042
+Kalaw     280.7624 611.6204   42.06478  408.7951    29.63160
+Pekon     318.6118 535.8494   39.83270  214.8476    18.97032
+Lawksawk  387.1017 630.0035   31.51366  320.5686    21.76677
+Nawnghkio 349.3359 547.9456   38.44960  323.0201    15.76465
+Kyaukme   210.9548 601.1773   39.58267  372.4930    30.94709</code></pre>
+</div>
+</div>
+<section id="data-standardization" class="level3">
+<h3 class="anchored" data-anchor-id="data-standardization">Data Standardization</h3>
+<section id="min-max-standardization" class="level4">
+<h4 class="anchored" data-anchor-id="min-max-standardization">min-max standardization</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>shan_ict.std <span class="ot">&lt;-</span> <span class="fu">normalize</span>(shan_ict)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(shan_ict.std)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    RADIO_PR          TV_PR          LLPHONE_PR       MPHONE_PR     
+ Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
+ 1st Qu.:0.2544   1st Qu.:0.4600   1st Qu.:0.1123   1st Qu.:0.2199  
+ Median :0.4097   Median :0.5523   Median :0.1948   Median :0.3846  
+ Mean   :0.4199   Mean   :0.5416   Mean   :0.2703   Mean   :0.3972  
+ 3rd Qu.:0.5330   3rd Qu.:0.6750   3rd Qu.:0.3746   3rd Qu.:0.5608  
+ Max.   :1.0000   Max.   :1.0000   Max.   :1.0000   Max.   :1.0000  
+  COMPUTER_PR     
+ Min.   :0.00000  
+ 1st Qu.:0.09598  
+ Median :0.17607  
+ Mean   :0.23692  
+ 3rd Qu.:0.29868  
+ Max.   :1.00000  </code></pre>
+</div>
+</div>
+</section>
+<section id="z-score-standardization" class="level4">
+<h4 class="anchored" data-anchor-id="z-score-standardization">z-score standardization</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>shan_ict.z <span class="ot">&lt;-</span> <span class="fu">scale</span>(shan_ict)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(shan_ict.z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            vars  n mean sd median trimmed  mad   min  max range  skew kurtosis
+RADIO_PR       1 55    0  1  -0.04   -0.06 0.94 -1.85 2.55  4.40  0.48    -0.27
+TV_PR          2 55    0  1   0.05    0.04 0.78 -2.47 2.09  4.56 -0.38    -0.23
+LLPHONE_PR     3 55    0  1  -0.33   -0.15 0.68 -1.19 3.20  4.39  1.37     1.49
+MPHONE_PR      4 55    0  1  -0.05   -0.06 1.01 -1.58 2.40  3.98  0.48    -0.34
+COMPUTER_PR    5 55    0  1  -0.26   -0.18 0.64 -1.03 3.31  4.34  1.80     2.96
+              se
+RADIO_PR    0.13
+TV_PR       0.13
+LLPHONE_PR  0.13
+MPHONE_PR   0.13
+COMPUTER_PR 0.13</code></pre>
+</div>
+</div>
+</section>
+<section id="visualizing-the-standardized-clustering-variables" class="level4">
+<h4 class="anchored" data-anchor-id="visualizing-the-standardized-clustering-variables">Visualizing the standardized clustering variables</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>ict_derived, </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x=</span> <span class="st">`</span><span class="at">RADIO_PR</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">20</span>, </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color=</span><span class="st">"black"</span>, </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill=</span><span class="st">"light blue"</span>) <span class="sc">+</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Raw values without standardisation"</span>)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>shan_ict_s_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(shan_ict.std)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>shan_ict_s_df, </span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span><span class="st">`</span><span class="at">RADIO_PR</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">20</span>, </span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color=</span><span class="st">"black"</span>, </span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill=</span><span class="st">"light blue"</span>) <span class="sc">+</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Min-Max Standardisation"</span>)</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>shan_ict_z_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(shan_ict.z)</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>shan_ict_z_df, </span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span><span class="st">`</span><span class="at">RADIO_PR</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">20</span>, </span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color=</span><span class="st">"black"</span>, </span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill=</span><span class="st">"light blue"</span>) <span class="sc">+</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Z-score Standardisation"</span>)</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a><span class="fu">ggarrange</span>(r, s, z,</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>          <span class="at">ncol =</span> <span class="dv">3</span>,</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>          <span class="at">nrow =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="In-class_Ex06_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="960"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>ict_derived, </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x=</span> <span class="st">`</span><span class="at">RADIO_PR</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color=</span><span class="st">"black"</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">fill=</span><span class="st">"light blue"</span>) <span class="sc">+</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Raw values without standardisation"</span>)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>shan_ict_s_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(shan_ict.std)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>shan_ict_s_df, </span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span><span class="st">`</span><span class="at">RADIO_PR</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color=</span><span class="st">"black"</span>,</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">fill=</span><span class="st">"light blue"</span>) <span class="sc">+</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Min-Max Standardisation"</span>)</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>shan_ict_z_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(shan_ict.z)</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>shan_ict_z_df, </span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span><span class="st">`</span><span class="at">RADIO_PR</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color=</span><span class="st">"black"</span>,</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">fill=</span><span class="st">"light blue"</span>) <span class="sc">+</span></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Z-score Standardisation"</span>)</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ggarrange</span>(r, s, z,</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>          <span class="at">ncol =</span> <span class="dv">3</span>,</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>          <span class="at">nrow =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="In-class_Ex06_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="960"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="computing-proximity-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="computing-proximity-matrix">Computing proximity matrix</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>proxmat <span class="ot">&lt;-</span> <span class="fu">dist</span>(shan_ict, <span class="at">method =</span> <span class="st">'euclidean'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The code chunk below can then be used to list the content of proxmat for visual inspection.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>proxmat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="computing-hierarchical-clustering" class="level3">
+<h3 class="anchored" data-anchor-id="computing-hierarchical-clustering">Computing hierarchical clustering</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>hclust_ward <span class="ot">&lt;-</span> <span class="fu">hclust</span>(proxmat, <span class="at">method =</span> <span class="st">'ward.D'</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(hclust_ward, <span class="at">cex =</span> <span class="fl">0.6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="In-class_Ex06_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="selecting-the-optimal-clustering-algorithm" class="level4">
+<h4 class="anchored" data-anchor-id="selecting-the-optimal-clustering-algorithm">Selecting the optimal clustering algorithm</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="st">"average"</span>, <span class="st">"single"</span>, <span class="st">"complete"</span>, <span class="st">"ward"</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(m) <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="st">"average"</span>, <span class="st">"single"</span>, <span class="st">"complete"</span>, <span class="st">"ward"</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>ac <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">agnes</span>(shan_ict, <span class="at">method =</span> x)<span class="sc">$</span>ac</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dbl</span>(m, ac)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  average    single  complete      ward 
+0.8131144 0.6628705 0.8950702 0.9427730 </code></pre>
+</div>
+</div>
+</section>
+<section id="determining-optimal-clusters" class="level4">
+<h4 class="anchored" data-anchor-id="determining-optimal-clusters">Determining Optimal Clusters</h4>
+<section id="gap-statistics-method" class="level5">
+<h5 class="anchored" data-anchor-id="gap-statistics-method">Gap statistics method</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>gap_stat <span class="ot">&lt;-</span> <span class="fu">clusGap</span>(shan_ict, </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">FUN =</span> hcut, </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">nstart =</span> <span class="dv">25</span>, </span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">K.max =</span> <span class="dv">10</span>, </span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">B =</span> <span class="dv">50</span>)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the result</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(gap_stat, <span class="at">method =</span> <span class="st">"firstmax"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Clustering Gap statistic ["clusGap"] from call:
+clusGap(x = shan_ict, FUNcluster = hcut, K.max = 10, B = 50, nstart = 25)
+B=50 simulated reference sets, k = 1..10; spaceH0="scaledPCA"
+ --&gt; Number of clusters (method 'firstmax'): 1
+          logW   E.logW       gap     SE.sim
+ [1,] 8.407129 8.680794 0.2736651 0.04460994
+ [2,] 8.130029 8.350712 0.2206824 0.03880130
+ [3,] 7.992265 8.202550 0.2102844 0.03362652
+ [4,] 7.862224 8.080655 0.2184311 0.03784781
+ [5,] 7.756461 7.978022 0.2215615 0.03897071
+ [6,] 7.665594 7.887777 0.2221833 0.03973087
+ [7,] 7.590919 7.806333 0.2154145 0.04054939
+ [8,] 7.526680 7.731619 0.2049390 0.04198644
+ [9,] 7.458024 7.660795 0.2027705 0.04421874
+[10,] 7.377412 7.593858 0.2164465 0.04540947</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_gap_stat</span>(gap_stat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="In-class_Ex06_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The graph goes down adn the up then down and up again, so choose the highest optimization value on the first bump, which is 5 or 6 in this case. From the statistic, the cluster 6 has a higher optimization, so that we can use cluster 6. see the gap value in the statistic</p>
+</section>
+</section>
+</section>
+<section id="interpreting-the-dendrograms" class="level3">
+<h3 class="anchored" data-anchor-id="interpreting-the-dendrograms">Interpreting the dendrograms</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(hclust_ward, <span class="at">cex =</span> <span class="fl">0.6</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rect.hclust</span>(hclust_ward, </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">k =</span> <span class="dv">6</span>, <span class="co"># you can change the number of clusters here </span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">border =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="In-class_Ex06_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="visually-driven-hierarchical-clustering-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="visually-driven-hierarchical-clustering-analysis">Visually-driven hierarchical clustering analysis</h3>
+<section id="transforming-the-data-frame-into-a-matrix" class="level5">
+<h5 class="anchored" data-anchor-id="transforming-the-data-frame-into-a-matrix">Transforming the data frame into a matrix</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>shan_ict_mat <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(shan_ict)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="plotting-interactive-cluster-heatmap-using-heatmaply" class="level4">
+<h4 class="anchored" data-anchor-id="plotting-interactive-cluster-heatmap-using-heatmaply">Plotting interactive cluster heatmap using heatmaply()</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">heatmaply</span>(<span class="fu">normalize</span>(shan_ict_mat),</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">Colv=</span><span class="cn">NA</span>,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">dist_method =</span> <span class="st">"euclidean"</span>,</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">hclust_method =</span> <span class="st">"ward.D"</span>,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">seriate =</span> <span class="st">"OLO"</span>,</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">colors =</span> Blues,</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">k_row =</span> <span class="dv">6</span>,</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">margins =</span> <span class="fu">c</span>(<span class="cn">NA</span>,<span class="dv">200</span>,<span class="dv">60</span>,<span class="cn">NA</span>),</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">fontsize_row =</span> <span class="dv">4</span>,</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">fontsize_col =</span> <span class="dv">5</span>,</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">main=</span><span class="st">"Geographic Segmentation of Shan State by ICT indicators"</span>,</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">xlab =</span> <span class="st">"ICT Indicators"</span>,</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">ylab =</span> <span class="st">"Townships of Shan State"</span></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>          )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="mapping-the-clusters-formed" class="level3">
+<h3 class="anchored" data-anchor-id="mapping-the-clusters-formed">Mapping the clusters formed</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">cutree</span>(hclust_ward, <span class="at">k=</span><span class="dv">6</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The output is called <em>groups</em>. It is a <em>list</em> object.</p>
+<p>In order to visualise the clusters, the <em>groups</em> object need to be appended onto <em>shan_sf</em> simple feature object.</p>
+<p>The code chunk below form the join in three steps:</p>
+<ul>
+<li><p>the <em>groups</em> list object will be converted into a matrix;</p></li>
+<li><p><em>cbind()</em> is used to append <em>groups</em> matrix onto shan_sf to produce an output simple feature object called <code>shan_sf_cluster</code>; and</p></li>
+<li><p><em>rename</em> of <strong>dplyr</strong> package is used to rename <em>as.matrix.groups</em> field as <em>CLUSTER</em>.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># DONT sort. It will mess up cbind.</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>shan_sf_cluster <span class="ot">&lt;-</span> <span class="fu">cbind</span>(shan_sf, <span class="fu">as.matrix</span>(groups)) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">CLUSTER=</span>as.matrix.groups.)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="co"># use cbind because this one is just a list, and no unique identifier, but no sorting</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qtm</span>(shan_sf_cluster, <span class="st">"CLUSTER"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="In-class_Ex06_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># #the cluster number is a factor, so the cluster is nominal</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The choropleth map above reveals the clusters are very fragmented. The is one of the major limitation when non-spatial clustering algorithm such as hierarchical cluster analysis method is used.</p>
+</section>
+</section>
+<section id="spatially-constrained-clustering-skater-approach" class="level2">
+<h2 class="anchored" data-anchor-id="spatially-constrained-clustering-skater-approach"><strong>Spatially Constrained Clustering: SKATER approach</strong></h2>
+<section id="converting-into-spatialpolygonsdataframe" class="level3">
+<h3 class="anchored" data-anchor-id="converting-into-spatialpolygonsdataframe"><strong>Converting into SpatialPolygonsDataFrame</strong></h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># in the latest version, poly2nb can take in sf, so this step is no longer required.</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>shan_sp <span class="ot">&lt;-</span> <span class="fu">as_Spatial</span>(shan_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="computing-neighbour-list" class="level3">
+<h3 class="anchored" data-anchor-id="computing-neighbour-list"><strong>Computing Neighbour List</strong></h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># shan.nb &lt;- poly2nb(shan_sp)</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>shan.nb <span class="ot">&lt;-</span> <span class="fu">poly2nb</span>(shan_sf)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(shan.nb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Neighbour list object:
+Number of regions: 55 
+Number of nonzero links: 264 
+Percentage nonzero weights: 8.727273 
+Average number of links: 4.8 
+Link number distribution:
+
+ 2  3  4  5  6  7  8  9 
+ 5  9  7 21  4  3  5  1 
+5 least connected regions:
+3 5 7 9 47 with 2 links
+1 most connected region:
+8 with 9 links</code></pre>
+</div>
+</div>
+<p>We can plot the neighbours list on shan_sp by using the code chunk below. Since we now can plot the community area boundaries as well, we plot this graph on top of the map. The first plot command gives the boundaries. This is followed by the plot of the neighbor list object, with coordinates applied to the original SpatialPolygonDataFrame (Shan state township boundaries) to extract the centroids of the polygons. These are used as the nodes for the graph representation. We also set the color to blue and specify add=TRUE to plot the network on top of the boundaries.\</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(shan_sp,</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="co">#      border=grey(.5))</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(shan.nb, </span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co">#      coordinates(shan_sp), </span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="co">#      col="blue", </span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="co">#      add=TRUE)</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(shan_sf), <span class="co"># st_geometry to output only one layer of geometry, without the st_geometry--&gt; then will plot the different columns; this is for the map </span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">border=</span><span class="fu">grey</span>(.<span class="dv">5</span>))</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>pts <span class="ot">&lt;-</span> <span class="fu">st_coordinates</span>(<span class="fu">st_centroid</span>(shan_sf))</span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(shan.nb, <span class="co"># give the edge</span></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>     pts, <span class="co"># give the points</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span><span class="st">"blue"</span>, </span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>     <span class="at">add=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="In-class_Ex06_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

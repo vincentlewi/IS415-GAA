@@ -58,11 +58,15 @@ ict_derived <- shan_ict %>%
          `COMPUTER`=`Computer`, `INTERNET`=`Internet at home`) 
 ```
 
-```{r}
+```{r eval=FALSE}
 shan_sf <- left_join(shan_sf, ict_derived, by=c("TS_PCODE" = "TS_PCODE")) #in reality you dont need the by statement as the name of the column is the same
 # if you want to combine the data, it is recommended to do the spatial in the beginning for left_join
 
 write_rds(shan_sf, 'data/rds/shan_sf.rds')
+```
+
+```{r}
+shan_sf <- readRDS('data/rds/shan_sf.rds')
 ```
 
 ## EDA
@@ -286,7 +290,7 @@ shan_ict_mat <- data.matrix(shan_ict)
 
 #### Plotting interactive cluster heatmap using heatmaply()
 
-```{r}
+```{r eval=FALSE}
 heatmaply(normalize(shan_ict_mat),
           Colv=NA,
           dist_method = "euclidean",
