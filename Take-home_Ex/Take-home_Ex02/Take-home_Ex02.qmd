@@ -9,6 +9,7 @@ date: "27 February 2024"
 execute: 
   message: false
   warning: false
+  freeze: true
 ---
 
 ## Background
