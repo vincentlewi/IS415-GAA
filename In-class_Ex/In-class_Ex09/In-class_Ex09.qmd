@@ -1,0 +1,199 @@
+---
+title: "In-class Exercise 9: Geographically Weighted Predictive Models"
+format: 
+  html:
+    code-summary: "Show code"
+    toc-depth: 3
+    code-overflow: "scroll"
+author: "Alexander Vincent Lewi"
+date: "18 March 2024"
+execute: 
+  freeze: true
+  message: false
+  warning: false
+---
+
+## Packages
+
+```{r}
+pacman::p_load(sf, spdep, GWmodel, SpatialML, 
+               tmap, tidymodels, tidyverse,
+               gtsummary, rpart, rpart.plot,
+               ggstatsplot, performance)
+```
+
+## Data
+
+```{r}
+rs_sf <- read_rds('data/rds/HDB_resale.rds')
+```
+
+```{r}
+rs_sf
+```
+
+Let's split the data into training and testing sets with a 50-50 split.
+
+```{r}
+set.seed(1234)
+resale_split <- initial_split(
+  rs_sf,
+  prop = 5/10)
+train_sf <- training(resale_split)
+test_sf <- testing(resale_split)
+```
+
+We first need to convert the data to a dataframe of base R because the `SpatialML` package only work with dataframes.
+
+```{r}
+train_df <- train_sf |>
+  st_drop_geometry() |>
+  as.data.frame()
+
+test_df <- test_sf |>
+  st_drop_geometry() |>
+  as.data.frame()
+```
+
+```{r, fig_width=12, fig_height=12}
+rs_sf1 <- rs_sf |>
+  st_drop_geometry()
+ggcorrmat(rs_sf1[, 2:17])
+```
+
+```{r}
+rs_mlr <- lm(RESALE_PRICE ~ ., data = train_df)
+tbl_regression(rs_mlr)
+```
+
+We can see that all the variables are significant, except `PROX_CHAS`. So, we will remove it.
+
+```{r}
+train_df <- train_df |>
+  select(-PROX_CHAS)
+test_df <- test_df |>
+  select(-PROX_CHAS)
+train_sf <- train_sf |>
+  select(-PROX_CHAS)
+test_sf <- test_sf |>
+  select(-PROX_CHAS)
+```
+
+Now let's fit the model with the processed data.
+
+```{r}
+rs_mlr <- lm(RESALE_PRICE ~ ., data = train_df)
+```
+
+> Or, similarly, we can just remove the `PROX_CHAS` variable from the formula if you do not want to remove it from your dataframe using the code below.
+>
+> `rs_mlr <- lm(RESALE_PRICE ~ . -PROX_CHAS, data = train_df)`
+
+## Calibrating the GWRF model
+
+The code chunk below extracts the x and y coordinates of the full, training, and the test data. We need to do this because the `SpatialML` package needs a separate dataframe for the x and y coordinates, unlike the GWR model that we used in the previous lesson.
+
+```{r}
+coords <- st_coordinates(rs_sf)
+corrds_train <- st_coordinates(train_sf)
+corrds_test <- st_coordinates(test_sf)
+```
+
+### Rpart
+
+```{r, dpi=192}
+rs_rp <- rpart(RESALE_PRICE ~ ., data = train_df)
+rpart.plot(rs_rp)
+```
+
+### RF
+
+```{r, eval=FALSE}
+set.seed(1234)
+rs_rf <- ranger(formula = RESALE_PRICE ~ ., data = train_df, importance = "impurity")
+rs_rf
+```
+
+```{r, eval=FALSE}
+write_rds(rs_rf, "data/models/rs_rf.rds")
+```
+
+```{r}
+rs_rf <- read_rds("data/models/rs_rf.rds")
+```
+
+```{r}
+vi <- as.data.frame(rs_rf$variable.importance)
+vi$variables <- rownames(vi)
+vi <- vi |> rename(vi = "rs_rf$variable.importance")
+```
+
+```{r}
+ggplot(data = vi,
+       aes(x = vi,
+           y = reorder(variables, vi))) +
+  geom_bar(stat="identity")
+```
+
+> For cleaner code, we can just use `geom_col()` instead of `geom_bar(stat="identity")`.
+>
+> `ggplot(data = vi) + geom_col(aes(x = vi, y = reorder(variables, vi)))`
+
+From the output above, we can see that the model work well with the variables provided. However, if the model cannot utilize the variables, your model might suffer from quasi-separation or quasi complete separation problem.
+
+Now, we can use the model to predict the test data.
+```{r, eval=FALSE}
+grf_pred <- predict(rs_rf, data = test_df)
+write_rds(grf_pred, "data/models/grf_pred.rds")
+
+rf_pred <- predict(rs_rf, data = test_df)
+write_rds(rf_pred, "data/models/rf_pred.rds")
+
+mlr_pred <- predict(rs_mlr, test_df)
+write_rds(mlr_pred, "data/models/mlr_pred.rds")
+```
+
+```{r}
+grf_pred <- read_rds("data/models/grf_pred.rds")
+grf_pred_df <- as.data.frame(grf_pred$predictions) |> rename(grf_pred = "grf_pred$predictions")
+
+rf_pred <- read_rds("data/models/rf_pred.rds")
+rf_pred_df <- as.data.frame(rf_pred$predictions) |> rename(rf_pred = "rf_pred$predictions")
+
+mlr_pred <- read_rds("data/models/mlr_pred.rds")
+mlr_pred_df <- as.data.frame(mlr_pred) |> rename(mlr_pred = "mlr_pred")
+```
+
+```{r}
+test_pred <- test_df |>
+  select(RESALE_PRICE) |>
+  cbind(grf_pred_df, rf_pred_df, mlr_pred_df)
+```
+
+to comparison between the models
+
+```{r}
+mc <- test_pred |> pivot_longer(cols=c(2:4),
+                                names_to = "models",
+                                values_to = "predicted")
+```
+
+```{r}
+mc |> group_by(models) |> yardstick::rmse(RESALE_PRICE, predicted)
+```
+
+
+
+```{r}
+mc |> group_by(models) |> yardstick::mape(RESALE_PRICE, predicted)
+```
+
+
+We can see that the random forest model outperforms the multi regression model. The basic non-geographic random forest model is better than the geographic random forest model. Therefore, in this use case, we will just use the random forest model because it runs faster than the geographic random forest model.
+
+```{r}
+ggplot(data = test_pred,
+       aes(x = grf_pred,
+           y=RESALE_PRICE)) +
+  geom_point()
+```
