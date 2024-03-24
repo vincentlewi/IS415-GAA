@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alexander Vincent Lewi">
+<meta name="dcterms.date" content="2024-03-24">
+
+<title>IS415-GAA - Take-home Exercise 3: Prototyping Modules for Geospatial Analytics Shiny Application</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">IS415-GAA</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hands-on-exercise" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Hands-on Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercise">    
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 5</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 6</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 7</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 8</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 9</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 10</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-in-class-exercise" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">In-class Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-exercise">    
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex02/In-class_Ex02.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex03/In-class_Ex03.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex04/In-class_Ex04.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex05/In-class_Ex05.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 5</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex06/In-class_Ex06.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 6</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex07/In-class_Ex07.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 7</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex09/In-class_Ex09.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 9</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-take-home-exercise" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Take-home Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercise">    
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html" rel="" target="">
+ <span class="dropdown-text">Take-home Exercise 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html" rel="" target="">
+ <span class="dropdown-text">Take-home Exercise 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html" rel="" target="">
+ <span class="dropdown-text">Take-home Exercise 3</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">Getting Started</a>
+  <ul>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data">The data</a>
+  <ul class="collapse">
+  <li><a href="#geospatial-data" id="toc-geospatial-data" class="nav-link" data-scroll-target="#geospatial-data">Geospatial Data</a></li>
+  <li><a href="#aspatial-data" id="toc-aspatial-data" class="nav-link" data-scroll-target="#aspatial-data">Aspatial Data</a></li>
+  </ul></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages">Packages</a></li>
+  </ul></li>
+  <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">Data Wrangling</a>
+  <ul>
+  <li><a href="#jakarta-map" id="toc-jakarta-map" class="nav-link" data-scroll-target="#jakarta-map">Jakarta Map</a></li>
+  <li><a href="#mamikos" id="toc-mamikos" class="nav-link" data-scroll-target="#mamikos">Mamikos</a>
+  <ul class="collapse">
+  <li><a href="#selecting-relevant-columns" id="toc-selecting-relevant-columns" class="nav-link" data-scroll-target="#selecting-relevant-columns">Selecting Relevant Columns</a></li>
+  <li><a href="#reformatting-the-size-column" id="toc-reformatting-the-size-column" class="nav-link" data-scroll-target="#reformatting-the-size-column">Reformatting the Size Column</a></li>
+  <li><a href="#removing-invalid-building-years" id="toc-removing-invalid-building-years" class="nav-link" data-scroll-target="#removing-invalid-building-years">Removing Invalid Building Years</a></li>
+  <li><a href="#handling-missing-values" id="toc-handling-missing-values" class="nav-link" data-scroll-target="#handling-missing-values">Handling Missing Values</a></li>
+  <li><a href="#converting-to-simple-features" id="toc-converting-to-simple-features" class="nav-link" data-scroll-target="#converting-to-simple-features">Converting to Simple Features</a></li>
+  <li><a href="#filtering-mamikos-units-in-jakarta" id="toc-filtering-mamikos-units-in-jakarta" class="nav-link" data-scroll-target="#filtering-mamikos-units-in-jakarta">Filtering Mamikos Units in Jakarta</a></li>
+  </ul></li>
+  <li><a href="#pois" id="toc-pois" class="nav-link" data-scroll-target="#pois">POIs</a>
+  <ul class="collapse">
+  <li><a href="#airport" id="toc-airport" class="nav-link" data-scroll-target="#airport">Airport</a></li>
+  <li><a href="#stasiun-kereta-api-train-stations" id="toc-stasiun-kereta-api-train-stations" class="nav-link" data-scroll-target="#stasiun-kereta-api-train-stations">Stasiun Kereta Api / Train Stations</a></li>
+  <li><a href="#kesehatan-health-facilities" id="toc-kesehatan-health-facilities" class="nav-link" data-scroll-target="#kesehatan-health-facilities">Kesehatan / Health Facilities</a></li>
+  <li><a href="#pendidikan-schools-and-universities" id="toc-pendidikan-schools-and-universities" class="nav-link" data-scroll-target="#pendidikan-schools-and-universities">Pendidikan / Schools and Universities</a></li>
+  <li><a href="#kantor-pos-post-offices" id="toc-kantor-pos-post-offices" class="nav-link" data-scroll-target="#kantor-pos-post-offices">Kantor Pos / Post Offices</a></li>
+  <li><a href="#sarana-ibadah-places-of-worship" id="toc-sarana-ibadah-places-of-worship" class="nav-link" data-scroll-target="#sarana-ibadah-places-of-worship">Sarana Ibadah / Places of Worship</a></li>
+  </ul></li>
+  <li><a href="#combining-the-data-of-the-pois" id="toc-combining-the-data-of-the-pois" class="nav-link" data-scroll-target="#combining-the-data-of-the-pois">Combining the data of the POIs</a></li>
+  <li><a href="#distance-calculation" id="toc-distance-calculation" class="nav-link" data-scroll-target="#distance-calculation">Distance Calculation</a>
+  <ul class="collapse">
+  <li><a href="#calculating-the-distance-matrix-of-each-rental-unit-to-each-poi" id="toc-calculating-the-distance-matrix-of-each-rental-unit-to-each-poi" class="nav-link" data-scroll-target="#calculating-the-distance-matrix-of-each-rental-unit-to-each-poi">Calculating the distance matrix of each rental unit to each POI</a></li>
+  <li><a href="#finding-the-nearest-distance-to-each-poi-for-each-rental-unit" id="toc-finding-the-nearest-distance-to-each-poi-for-each-rental-unit" class="nav-link" data-scroll-target="#finding-the-nearest-distance-to-each-poi-for-each-rental-unit">Finding the nearest distance to each POI for each rental unit</a></li>
+  <li><a href="#counting-the-number-of-pois-within-the-median-distance-for-each-rental-unit" id="toc-counting-the-number-of-pois-within-the-median-distance-for-each-rental-unit" class="nav-link" data-scroll-target="#counting-the-number-of-pois-within-the-median-distance-for-each-rental-unit">Counting the number of POIs within the median distance for each rental unit</a></li>
+  <li><a href="#combine-proximity-data-and-poi-count-data-with-the-mamikos-dataset" id="toc-combine-proximity-data-and-poi-count-data-with-the-mamikos-dataset" class="nav-link" data-scroll-target="#combine-proximity-data-and-poi-count-data-with-the-mamikos-dataset">Combine proximity data and POI count data with the mamikos dataset</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#exploratory-data-analysis-eda" id="toc-exploratory-data-analysis-eda" class="nav-link" data-scroll-target="#exploratory-data-analysis-eda">Exploratory Data Analysis (EDA)</a>
+  <ul>
+  <li><a href="#statistical-graphics" id="toc-statistical-graphics" class="nav-link" data-scroll-target="#statistical-graphics">Statistical Graphics</a></li>
+  <li><a href="#visualizing-the-relationships-of-the-independent-variable" id="toc-visualizing-the-relationships-of-the-independent-variable" class="nav-link" data-scroll-target="#visualizing-the-relationships-of-the-independent-variable">Visualizing the relationships of the independent variable</a></li>
+  <li><a href="#multiple-histogram-plots-distribution-of-variables" id="toc-multiple-histogram-plots-distribution-of-variables" class="nav-link" data-scroll-target="#multiple-histogram-plots-distribution-of-variables">Multiple Histogram Plots distribution of variables</a></li>
+  <li><a href="#drawing-statistical-point-map" id="toc-drawing-statistical-point-map" class="nav-link" data-scroll-target="#drawing-statistical-point-map">Drawing Statistical Point Map</a></li>
+  </ul></li>
+  <li><a href="#geographically-weighted-regression-gwr" id="toc-geographically-weighted-regression-gwr" class="nav-link" data-scroll-target="#geographically-weighted-regression-gwr">Geographically Weighted Regression (GWR)</a>
+  <ul>
+  <li><a href="#creating-a-spatialpointsdataframe" id="toc-creating-a-spatialpointsdataframe" class="nav-link" data-scroll-target="#creating-a-spatialpointsdataframe">Creating a SpatialPointsDataFrame</a></li>
+  <li><a href="#computing-the-bandwidth" id="toc-computing-the-bandwidth" class="nav-link" data-scroll-target="#computing-the-bandwidth">Computing the Bandwidth</a></li>
+  <li><a href="#calibrating-the-gwr-model" id="toc-calibrating-the-gwr-model" class="nav-link" data-scroll-target="#calibrating-the-gwr-model">Calibrating the GWR Model</a></li>
+  </ul></li>
+  <li><a href="#visualizing-gwr-output" id="toc-visualizing-gwr-output" class="nav-link" data-scroll-target="#visualizing-gwr-output">Visualizing GWR Output</a>
+  <ul>
+  <li><a href="#converting-sdf-into-sf-data.frame" id="toc-converting-sdf-into-sf-data.frame" class="nav-link" data-scroll-target="#converting-sdf-into-sf-data.frame">Converting SDF into sf data.frame</a></li>
+  <li><a href="#visualizing-local-r2" id="toc-visualizing-local-r2" class="nav-link" data-scroll-target="#visualizing-local-r2">Visualizing local R2</a></li>
+  <li><a href="#visualizing-the-gwr-coefficients" id="toc-visualizing-the-gwr-coefficients" class="nav-link" data-scroll-target="#visualizing-the-gwr-coefficients">Visualizing the GWR Coefficients</a></li>
+  <li><a href="#visualizing-the-gwr-standard-errors" id="toc-visualizing-the-gwr-standard-errors" class="nav-link" data-scroll-target="#visualizing-the-gwr-standard-errors">Visualizing the GWR Standard Errors</a></li>
+  </ul></li>
+  <li><a href="#ui-design" id="toc-ui-design" class="nav-link" data-scroll-target="#ui-design">UI Design</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Take-home Exercise 3: Prototyping Modules for Geospatial Analytics Shiny Application</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alexander Vincent Lewi </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 24, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+</section>
+<section id="getting-started" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
+<section id="the-data" class="level3">
+<h3 class="anchored" data-anchor-id="the-data">The data</h3>
+<section id="geospatial-data" class="level4">
+<h4 class="anchored" data-anchor-id="geospatial-data">Geospatial Data</h4>
+<ul>
+<li><p><a href="https://www.indonesia-geospasial.com/2020/01/shp-rbi-provinsi-dki-jakarta-perwilayah.html">Jakarta Shapefile</a></p>
+<ul>
+<li><p>This dataset is taken from the Indonesia Geospasial website</p></li>
+<li><p>It is divided based on the different administrative cities in Jakarta, consisting of the POIs available in each city.</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="aspatial-data" class="level4">
+<h4 class="anchored" data-anchor-id="aspatial-data">Aspatial Data</h4>
+<ul>
+<li><p><a href="https://mamikos.com/">Mamikos Dataset</a></p>
+<ul>
+<li>This dataset is scraped from Mamikos website</li>
+<li>The dataset consists of rental units in Jakarta and the facilities provided in each rental unit</li>
+</ul></li>
+<li><p><a href="https://referensi.data.kemdikbud.go.id/pendidikan/dikti/010000/1">School and University dataset in Jakarta</a></p>
+<ul>
+<li>This dataset is scraped from Indonesia’s Ministry of Education and Culture (Kemendikbud) website</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="packages" class="level3">
+<h3 class="anchored" data-anchor-id="packages">Packages</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(car, olsrr, corrplot, ggpubr, sf, spdep, GWmodel, tmap, tidyverse, gtsummary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="data-wrangling" class="level2">
+<h2 class="anchored" data-anchor-id="data-wrangling">Data Wrangling</h2>
+<section id="jakarta-map" class="level3">
+<h3 class="anchored" data-anchor-id="jakarta-map">Jakarta Map</h3>
+<p>First, we need to combine the shapefiles of each administrative ‘desa’ in Jakarta to create a map of Jakarta.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>jakbar_adm_desa <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_BARAT"</span>, <span class="at">layer =</span> <span class="st">"ADMINISTRASIDESA_AR_25K"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>jakbar_adm_desa <span class="ot">&lt;-</span> <span class="fu">st_zm</span>(jakbar_adm_desa, <span class="at">zm=</span><span class="st">"Z"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>jakbar_adm_desa_sf <span class="ot">&lt;-</span> jakbar_adm_desa <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>jakpus_adm_desa <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_PUSAT"</span>, <span class="at">layer =</span> <span class="st">"ADMINISTRASIDESA_AR_25K"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>jakpus_adm_desa <span class="ot">&lt;-</span> <span class="fu">st_zm</span>(jakpus_adm_desa, <span class="at">zm=</span><span class="st">"Z"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>jakpus_adm_desa_sf <span class="ot">&lt;-</span> jakpus_adm_desa <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>jaksel_adm_desa <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_SELATAN"</span>, <span class="at">layer =</span> <span class="st">"ADMINISTRASIDESA_AR_25K"</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>jaksel_adm_desa <span class="ot">&lt;-</span> <span class="fu">st_zm</span>(jaksel_adm_desa, <span class="at">zm=</span><span class="st">"Z"</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>jaksel_adm_desa_sf <span class="ot">&lt;-</span> jaksel_adm_desa <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>jakut_adm_desa <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_UTARA"</span>, <span class="at">layer =</span> <span class="st">"ADMINISTRASIDESA_AR_25K"</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>jakut_adm_desa <span class="ot">&lt;-</span> <span class="fu">st_zm</span>(jakut_adm_desa, <span class="at">zm=</span><span class="st">"Z"</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>jakut_adm_desa_sf <span class="ot">&lt;-</span> jakut_adm_desa <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>jaktim_adm_desa <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_TIMUR"</span>, <span class="at">layer =</span> <span class="st">"ADMINISTRASIDESA_AR_25K"</span>)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>jaktim_adm_desa <span class="ot">&lt;-</span> <span class="fu">st_zm</span>(jaktim_adm_desa, <span class="at">zm=</span><span class="st">"Z"</span>)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>jaktim_adm_desa_sf <span class="ot">&lt;-</span> jaktim_adm_desa <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>jaktim_adm_desa_sf <span class="ot">&lt;-</span> <span class="fu">st_make_valid</span>(jaktim_adm_desa_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>To combine the shapefiles, we use the <code>rbind</code> function. Then, we save the shapefile as an shp file so that we can call it.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>jakarta_sf <span class="ot">&lt;-</span> <span class="fu">rbind</span>(jakbar_adm_desa_sf,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                    jakpus_adm_desa_sf,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                    jaksel_adm_desa_sf,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                    jakut_adm_desa_sf,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                    jaktim_adm_desa_sf)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(jakarta_sf, <span class="st">"data/rds/jakarta_sf.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>jakarta_sf <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"data/rds/jakarta_sf.rds"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qtm</span>(jakarta_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="mamikos" class="level3">
+<h3 class="anchored" data-anchor-id="mamikos">Mamikos</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mamikos <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/aspatial/mamikos.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="selecting-relevant-columns" class="level4">
+<h4 class="anchored" data-anchor-id="selecting-relevant-columns">Selecting Relevant Columns</h4>
+<p>Some of the important columns in the dataset include:</p>
+<ul>
+<li><p><strong>_id</strong>: The unique identifier for each unit.</p></li>
+<li><p><strong>price_monthly</strong>: The monthly price of the unit.</p></li>
+<li><p><strong>latitude</strong>: The latitude of the unit.</p></li>
+<li><p><strong>longitude</strong>: The longitude of the unit.</p></li>
+<li><p><strong>gender</strong>: The gender preference for potential tenants (mixed, male, or female).</p></li>
+<li><p><strong>size</strong> : The size of the accommodation.</p></li>
+<li><p><strong>fac_room</strong>: Facilities available within the room itself (e.g., air conditioning, bed, wardrobe, etc.).</p></li>
+<li><p><strong>fac_share</strong>: Shared facilities that tenants can use (e.g., kitchen, living room).</p></li>
+<li><p><strong>fac_bath</strong>: Bathroom facilities (private or shared, including features like hot water).</p></li>
+<li><p><strong>fac_near</strong>: Facilities or points of interest near the accommodation (e.g., supermarket, campus, public transport).</p></li>
+<li><p><strong>fac_park</strong>: Parking facilities (availability and type, such as for cars or motorbikes).</p></li>
+<li><p><strong>kos_rule</strong>: The rules or regulations tenants must follow (e.g., no pets, curfew times).</p></li>
+<li><p><strong>fac_price</strong>: Additional costs for facilities (e.g., laundry fees, cleaning service fees).</p></li>
+<li><p><strong>building_year</strong>: The year the building was constructed or established.</p></li>
+<li><p><strong>number_success_owner_trx</strong>: The number of successful transactions the owner has completed on the platform.</p></li>
+<li><p><strong>number_success_kos_trx</strong>: The number of successful transactions for this specific listing.</p></li>
+</ul>
+<p>For the purpose of this prototyping, we will only focus on <strong>price_monthly</strong>, <strong>latitude</strong>, <strong>longitude</strong>, <strong>gender</strong>, <strong>size</strong>, and <strong>building_year</strong>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mamikos <span class="ot">&lt;-</span> mamikos <span class="sc">|&gt;</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">_id</span><span class="st">`</span>, price_monthly, latitude, longitude, gender, size, building_year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="reformatting-the-size-column" class="level4">
+<h4 class="anchored" data-anchor-id="reformatting-the-size-column">Reformatting the Size Column</h4>
+<p>The <strong>size</strong> column is currently a character column with inconsistent formats. We will convert this to a numeric column representing the total area. To do that, we will create a custom function to calculate the area based on the different formats found in the dataset.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>calculate_area <span class="ot">&lt;-</span>  <span class="cf">function</span>(size_string) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Deal with potential NA values upfront</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.na</span>(size_string)) {</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="cn">NA</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># lowercase the string for easier matching</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  size <span class="ot">&lt;-</span> <span class="fu">tolower</span>(size_string)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Replace all non-standard x's and commas with a standard format</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  size <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"×"</span>, <span class="st">"x"</span>, size)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Normalize decimal separator from comma to dot and remove spaces</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  size <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">",</span><span class="sc">\\</span><span class="st">s*"</span>, <span class="st">"."</span>, size) <span class="co"># Changes "2,5 x 3" to "2.5 x 3"</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove any "m2" text, assuming that the presence of 'x' or '×' already denotes area calculation</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  size <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"m2"</span>, <span class="st">""</span>, size, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract numeric values</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  numbers <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">unlist</span>(<span class="fu">str_extract_all</span>(size, <span class="st">"[0-9.]+"</span>)))</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Simple heuristic: if more than 2 numbers, take first two assuming additional info is irrelevant</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(numbers) <span class="sc">&gt;</span> <span class="dv">2</span>) {</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    numbers <span class="ot">&lt;-</span> numbers[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate the area; if it's a single number, assume it's already the area</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  area <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">length</span>(numbers) <span class="sc">==</span> <span class="dv">2</span>) <span class="fu">prod</span>(numbers) <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">length</span>(numbers) <span class="sc">==</span> <span class="dv">1</span>) numbers <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (area <span class="sc">&gt;</span> <span class="dv">10000</span>) {</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    area <span class="ot">&lt;-</span> area <span class="sc">/</span> <span class="dv">10000</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (area <span class="sc">&gt;</span> <span class="dv">100</span>) {</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>    area <span class="ot">&lt;-</span> area <span class="sc">/</span> <span class="dv">100</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (area <span class="sc">==</span> <span class="dv">0</span> ) {</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>    area <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span> (area)</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>We can now apply this function to the <strong>size</strong> column to calculate the area in square meters.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>mamikos <span class="ot">&lt;-</span> mamikos <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">size =</span> <span class="fu">sapply</span>(size, calculate_area))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="removing-invalid-building-years" class="level4">
+<h4 class="anchored" data-anchor-id="removing-invalid-building-years">Removing Invalid Building Years</h4>
+<p>Some entries in the <strong>building_year</strong> column have a value of 0, which is likely an error or missing data. We will remove these entries from the dataset.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>mamikos <span class="ot">&lt;-</span> mamikos <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(building_year <span class="sc">&gt;</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="handling-missing-values" class="level4">
+<h4 class="anchored" data-anchor-id="handling-missing-values">Handling Missing Values</h4>
+<p>Finally, we will remove any rows with missing values in the dataset.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>mamikos <span class="ot">&lt;-</span> mamikos <span class="sc">|&gt;</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="converting-to-simple-features" class="level4">
+<h4 class="anchored" data-anchor-id="converting-to-simple-features">Converting to Simple Features</h4>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mamikos_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(mamikos, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"longitude"</span>, <span class="st">"latitude"</span>), <span class="at">crs=</span><span class="dv">4326</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="filtering-mamikos-units-in-jakarta" class="level4">
+<h4 class="anchored" data-anchor-id="filtering-mamikos-units-in-jakarta">Filtering Mamikos Units in Jakarta</h4>
+<p>Although the dataset is scraped specifially for Jakarta, the website still recommends units outside of Jakarta. We will filter the dataset to only include units within Jakarta.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>mamikos_sf <span class="ot">&lt;-</span> mamikos_sf <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_intersection</span>(jakarta_sf) <span class="sc">|&gt;</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(X_id, price_monthly, gender, size, building_year, geometry)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(mamikos_sf, <span class="st">"data/rds/mamikos_sf.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="pois" class="level3">
+<h3 class="anchored" data-anchor-id="pois">POIs</h3>
+<p>POIs are points of interest that are relevant to potential tenants. In this prototype, we will focus on the following POIs:</p>
+<ul>
+<li><p><strong>Airport</strong>: Soekarno-Hatta International Airport and Halim Perdanakusuma International Airport.</p></li>
+<li><p><strong>Stasiun Kereta Api</strong>: Train stations.</p></li>
+<li><p><strong>Kesehatan</strong>: Health facilities.</p></li>
+<li><p><strong>Pendidikan</strong>: Schools and universities.</p></li>
+<li><p><strong>Kantor Pos</strong>: Post offices.</p></li>
+<li><p><strong>Sarana Ibadah</strong>: Places of worship.</p></li>
+</ul>
+<p>Before we can calculate the distance between each Mamikos unit and the Points of Interest (POIs), we need to create a helper <code>remove_unit()</code> to remove the unit string generated by the function.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>remove_unit <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.numeric</span>(<span class="fu">str_sub</span>(x, <span class="dv">1</span>, <span class="sc">-</span><span class="dv">4</span>))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="airport" class="level4">
+<h4 class="anchored" data-anchor-id="airport">Airport</h4>
+<p>Since the airport shapefile in the Jakarta dataset are all empty, we will manually input the coordinates of the two airports in Jakarta.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>name <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Soekarno-Hatta International Airport"</span>, <span class="st">"Halim Perdanakusuma International Airport"</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">6.123335553024524</span>, <span class="sc">-</span><span class="fl">6.265380365738848</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">106.65980883674271</span>, <span class="fl">106.8851665557591</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>REMARK <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"AIRPORT"</span>, <span class="st">"AIRPORT"</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>airport <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(REMARK, lat, lon) <span class="sc">|&gt;</span> <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"lon"</span>, <span class="st">"lat"</span>), <span class="at">crs =</span> <span class="dv">4326</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="stasiun-kereta-api-train-stations" class="level4">
+<h4 class="anchored" data-anchor-id="stasiun-kereta-api-train-stations">Stasiun Kereta Api / Train Stations</h4>
+<p>We will read the shapefiles of the train stations in each administrative ‘desa’ in Jakarta and combine them into one.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>stasiunka_jakbar <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_BARAT"</span>, <span class="at">layer =</span> <span class="st">"STASIUNKA_PT_25K"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>stasiunka_jakbar_sf <span class="ot">&lt;-</span> stasiunka_jakbar <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>stasiunka_jakpus <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_PUSAT"</span>, <span class="at">layer =</span> <span class="st">"STASIUNKA_PT_25K"</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>stasiunka_jakpus_sf <span class="ot">&lt;-</span> stasiunka_jakpus <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>stasiunka_jaksel <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_SELATAN"</span>, <span class="at">layer =</span> <span class="st">"STASIUNKA_PT_25K"</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>stasiunka_jaksel_sf <span class="ot">&lt;-</span> stasiunka_jaksel <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>stasiunka_jakut <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_UTARA"</span>, <span class="at">layer =</span> <span class="st">"STASIUNKA_PT_25K"</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>stasiunka_jakut_sf <span class="ot">&lt;-</span> stasiunka_jakut <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>stasiunka_jaktim <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_TIMUR"</span>, <span class="at">layer =</span> <span class="st">"STASIUNKA_PT_25K"</span>)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>stasiunka_jaktim_sf <span class="ot">&lt;-</span> stasiunka_jaktim <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>stasiunka <span class="ot">&lt;-</span> <span class="fu">rbind</span>(stasiunka_jakbar_sf, stasiunka_jakpus_sf, stasiunka_jaksel_sf, stasiunka_jakut_sf, stasiunka_jaktim_sf) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">REMARK =</span> <span class="st">"STASIUNKA"</span>) <span class="sc">|&gt;</span> <span class="fu">st_zm</span>(<span class="at">zm=</span><span class="st">"Z"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>CALCULATING MEDIAN DISTANCE BETWEEN STASIUNKA</p>
+<p>Now we need to count the number of POIs within a certain distance from the rental units. We will use the median distance as the threshold.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>stasiunka_dist <span class="ot">&lt;-</span> <span class="fu">st_distance</span>(stasiunka)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>stasiunka_dist <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(stasiunka_dist)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>stasiunka_dist <span class="ot">&lt;-</span> <span class="fu">sapply</span>(stasiunka_dist, remove_unit)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(stasiunka_dist) <span class="ot">&lt;-</span> stasiunka<span class="sc">$</span>REMARK</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(stasiunka_dist) <span class="ot">&lt;-</span> stasiunka<span class="sc">$</span>REMARK</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>stasiunka_dist_med <span class="ot">&lt;-</span> <span class="fu">apply</span>(stasiunka_dist, <span class="dv">1</span>, median, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>stasiunka_dist_med <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(stasiunka_dist_med)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>stasiunka_med <span class="ot">&lt;-</span> <span class="fu">median</span>(stasiunka_dist_med<span class="sc">$</span>stasiunka_dist_med)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="kesehatan-health-facilities" class="level4">
+<h4 class="anchored" data-anchor-id="kesehatan-health-facilities">Kesehatan / Health Facilities</h4>
+<p>Next, we will read the shapefiles of the health facilities in each administrative ‘desa’ in Jakarta and combine them into one.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>kesehatan_jakbar <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_BARAT"</span>, <span class="at">layer =</span> <span class="st">"KESEHATAN_PT_25K"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>kesehatan_jakbar_sf <span class="ot">&lt;-</span> kesehatan_jakbar <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>kesehatan_jakpus <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_PUSAT"</span>, <span class="at">layer =</span> <span class="st">"KESEHATAN_PT_25K"</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>kesehatan_jakpus_sf <span class="ot">&lt;-</span> kesehatan_jakpus <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>kesehatan_jaksel <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_SELATAN"</span>, <span class="at">layer =</span> <span class="st">"KESEHATAN_PT_25K"</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>kesehatan_jaksel_sf <span class="ot">&lt;-</span> kesehatan_jaksel <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>kesehatan_jakut <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_UTARA"</span>, <span class="at">layer =</span> <span class="st">"KESEHATAN_PT_25K"</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>kesehatan_jakut_sf <span class="ot">&lt;-</span> kesehatan_jakut <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>kesehatan_jaktim <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_TIMUR"</span>, <span class="at">layer =</span> <span class="st">"KESEHATAN_PT_25K"</span>)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>kesehatan_jaktim_sf <span class="ot">&lt;-</span> kesehatan_jaktim <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>kesehatan <span class="ot">&lt;-</span> <span class="fu">rbind</span>(kesehatan_jakbar_sf, kesehatan_jakpus_sf, kesehatan_jaksel_sf, kesehatan_jakut_sf, kesehatan_jaktim_sf) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">REMARK =</span> <span class="st">"KESEHATAN"</span>) <span class="sc">|&gt;</span> <span class="fu">st_zm</span>(<span class="at">zm=</span><span class="st">"Z"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>CALCULATING MEDIAN DISTANCE BETWEEN KESEHATAN</p>
+<p>Same as the STASIUNKA POI, we will calculate the median distance between each health facility in Jakarta, which will be used when we are counting the number of POIs within a certain distance from the rental units.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>kesehatan_dist <span class="ot">&lt;-</span> <span class="fu">st_distance</span>(kesehatan)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>kesehatan_dist <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(kesehatan_dist)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>kesehatan_dist <span class="ot">&lt;-</span> <span class="fu">sapply</span>(kesehatan_dist, remove_unit)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(kesehatan_dist) <span class="ot">&lt;-</span> kesehatan<span class="sc">$</span>REMARK</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(kesehatan_dist) <span class="ot">&lt;-</span> kesehatan<span class="sc">$</span>REMARK</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>kesehatan_dist_med <span class="ot">&lt;-</span> <span class="fu">apply</span>(kesehatan_dist, <span class="dv">1</span>, median, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>kesehatan_dist_med <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(kesehatan_dist_med)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>kesehatan_med <span class="ot">&lt;-</span> <span class="fu">median</span>(kesehatan_dist_med<span class="sc">$</span>kesehatan_dist_med)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="pendidikan-schools-and-universities" class="level4">
+<h4 class="anchored" data-anchor-id="pendidikan-schools-and-universities">Pendidikan / Schools and Universities</h4>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pendidikan_jakbar <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/Jakarta/KOTA_JAKARTA_BARAT"</span>, <span class="at">layer =</span> <span class="st">"PENDIDIKAN_PT_25K"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>pendidikan_jakbar_sf <span class="ot">&lt;-</span> pendidikan_jakbar <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>pendidikan_jakpus <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/Jakarta/KOTA_JAKARTA_PUSAT"</span>, <span class="at">layer =</span> <span class="st">"PENDIDIKAN_PT_25K"</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>pendidikan_jakpus_sf <span class="ot">&lt;-</span> pendidikan_jakpus <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>pendidikan_jaksel <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/Jakarta/KOTA_JAKARTA_SELATAN"</span>, <span class="at">layer =</span> <span class="st">"PENDIDIKAN_PT_25K"</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>pendidikan_jaksel_sf <span class="ot">&lt;-</span> pendidikan_jaksel <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>pendidikan_jakut <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/Jakarta/KOTA_JAKARTA_UTARA"</span>, <span class="at">layer =</span> <span class="st">"PENDIDIKAN_PT_25K"</span>)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>pendidikan_jakut_sf <span class="ot">&lt;-</span> pendidikan_jakut <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>pendidikan_jaktim <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/Jakarta/KOTA_JAKARTA_TIMUR"</span>, <span class="at">layer =</span> <span class="st">"PENDIDIKAN_PT_25K"</span>)</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>pendidikan_jaktim_sf <span class="ot">&lt;-</span> pendidikan_jaktim <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>pendidikan <span class="ot">&lt;-</span> <span class="fu">rbind</span>(pendidikan_jakbar_sf, pendidikan_jakpus_sf, pendidikan_jaksel_sf, pendidikan_jakut_sf, pendidikan_jaktim_sf) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">REMARK =</span> <span class="st">"PENDIDIKAN"</span>) <span class="sc">|&gt;</span> <span class="fu">st_zm</span>(<span class="at">zm=</span><span class="st">"Z"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>CALCULATING MEDIAN DISTANCE BETWEEN PENDIDIKAN</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>pendidikan_dist <span class="ot">&lt;-</span> <span class="fu">st_distance</span>(pendidikan)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>pendidikan_dist <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(pendidikan_dist)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>pendidikan_dist <span class="ot">&lt;-</span> <span class="fu">sapply</span>(pendidikan_dist, rm_unit)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(pendidikan_dist) <span class="ot">&lt;-</span> pendidikan<span class="sc">$</span>REMARK</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(pendidikan_dist) <span class="ot">&lt;-</span> pendidikan<span class="sc">$</span>REMARK</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>pendidikan_dist_med <span class="ot">&lt;-</span> <span class="fu">apply</span>(pendidikan_dist, <span class="dv">1</span>, median, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>pendidikan_dist_med <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(pendidikan_dist_med)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>pendidikan_med <span class="ot">&lt;-</span> <span class="fu">median</span>(pendidikan_dist_med<span class="sc">$</span>pendidikan_dist_med)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="kantor-pos-post-offices" class="level4">
+<h4 class="anchored" data-anchor-id="kantor-pos-post-offices">Kantor Pos / Post Offices</h4>
+<p>We will also read the shapefiles of the post offices in each administrative ‘desa’ in Jakarta and combine them into one.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>kantorpos_jakbar <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_BARAT"</span>, <span class="at">layer =</span> <span class="st">"KANTORPOS_PT_25K"</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>kantorpos_jakbar_sf <span class="ot">&lt;-</span> kantorpos_jakbar <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>kantorpos_jakpus <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_PUSAT"</span>, <span class="at">layer =</span> <span class="st">"KANTORPOS_PT_25K"</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>kantorpos_jakpus_sf <span class="ot">&lt;-</span> kantorpos_jakpus <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>kantorpos_jaksel <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_SELATAN"</span>, <span class="at">layer =</span> <span class="st">"KANTORPOS_PT_25K"</span>)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>kantorpos_jaksel_sf <span class="ot">&lt;-</span> kantorpos_jaksel <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>kantorpos_jakut <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_UTARA"</span>, <span class="at">layer =</span> <span class="st">"KANTORPOS_PT_25K"</span>)</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>kantorpos_jakut_sf <span class="ot">&lt;-</span> kantorpos_jakut <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>kantorpos_jaktim <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_TIMUR"</span>, <span class="at">layer =</span> <span class="st">"KANTORPOS_PT_25K"</span>)</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>kantorpos_jaktim_sf <span class="ot">&lt;-</span> kantorpos_jaktim <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>kantorpos <span class="ot">&lt;-</span> <span class="fu">rbind</span>(kantorpos_jakbar_sf, kantorpos_jakpus_sf, kantorpos_jaksel_sf, kantorpos_jakut_sf, kantorpos_jaktim_sf) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">REMARK =</span> <span class="st">"KANTORPOS"</span>) <span class="sc">|&gt;</span> <span class="fu">st_zm</span>(<span class="at">zm=</span><span class="st">"Z"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>CALCULATING MEDIAN DISTANCE BETWEEN KANTORPOS</p>
+<p>We will calculate the median distance between each post office in Jakarta, which will be used when we are counting the number of POIs within a certain distance from the rental units.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>kantorpos_dist <span class="ot">&lt;-</span> <span class="fu">st_distance</span>(kantorpos)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>kantorpos_dist <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(kantorpos_dist)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>kantorpos_dist <span class="ot">&lt;-</span> <span class="fu">sapply</span>(kantorpos_dist, remove_unit)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(kantorpos_dist) <span class="ot">&lt;-</span> kantorpos<span class="sc">$</span>REMARK</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(kantorpos_dist) <span class="ot">&lt;-</span> kantorpos<span class="sc">$</span>REMARK</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>kantorpos_dist_med <span class="ot">&lt;-</span> <span class="fu">apply</span>(kantorpos_dist, <span class="dv">1</span>, median, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>kantorpos_dist_med <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(kantorpos_dist_med)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>kantorpos_med <span class="ot">&lt;-</span> <span class="fu">median</span>(kantorpos_dist_med<span class="sc">$</span>kantorpos_dist_med)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="sarana-ibadah-places-of-worship" class="level4">
+<h4 class="anchored" data-anchor-id="sarana-ibadah-places-of-worship">Sarana Ibadah / Places of Worship</h4>
+<p>This time, we will read the shapefiles of the places of worship in each administrative ‘desa’ in Jakarta and combine them into one.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>saranaibadah_jakbar <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_BARAT"</span>, <span class="at">layer =</span> <span class="st">"SARANAIBADAH_PT_25K"</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>saranaibadah_jakbar_sf <span class="ot">&lt;-</span> saranaibadah_jakbar <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>saranaibadah_jakpus <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_PUSAT"</span>, <span class="at">layer =</span> <span class="st">"SARANAIBADAH_PT_25K"</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>saranaibadah_jakpus_sf <span class="ot">&lt;-</span> saranaibadah_jakpus <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>saranaibadah_jaksel <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_SELATAN"</span>, <span class="at">layer =</span> <span class="st">"SARANAIBADAH_PT_25K"</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>saranaibadah_jaksel_sf <span class="ot">&lt;-</span> saranaibadah_jaksel <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>saranaibadah_jakut <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_UTARA"</span>, <span class="at">layer =</span> <span class="st">"SARANAIBADAH_PT_25K"</span>)</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>saranaibadah_jakut_sf <span class="ot">&lt;-</span> saranaibadah_jakut <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>saranaibadah_jaktim <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial/Jakarta/KOTA_JAKARTA_TIMUR"</span>, <span class="at">layer =</span> <span class="st">"SARANAIBADAH_PT_25K"</span>)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>saranaibadah_jaktim_sf <span class="ot">&lt;-</span> saranaibadah_jaktim <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(REMARK, geometry)</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>saranaibadah <span class="ot">&lt;-</span> <span class="fu">rbind</span>(saranaibadah_jakbar_sf, saranaibadah_jakpus_sf, saranaibadah_jaksel_sf, saranaibadah_jakut_sf, saranaibadah_jaktim_sf) <span class="sc">|&gt;</span> <span class="fu">st_zm</span>(<span class="at">zm=</span><span class="st">"Z"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>CALCULATING MEDIAN DISTANCE BETWEEN SARANAIBADAH</p>
+<p>We will calculate the median distance between each place of worship in Jakarta, which will be used when we are counting the number of POIs within a certain distance from the rental units.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>masjid <span class="ot">&lt;-</span> saranaibadah <span class="sc">|&gt;</span> <span class="fu">filter</span>(REMARK <span class="sc">==</span> <span class="st">"Masjid"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>gereja <span class="ot">&lt;-</span> saranaibadah <span class="sc">|&gt;</span> <span class="fu">filter</span>(REMARK <span class="sc">==</span> <span class="st">"Gereja"</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>vihara <span class="ot">&lt;-</span> saranaibadah <span class="sc">|&gt;</span> <span class="fu">filter</span>(REMARK <span class="sc">==</span> <span class="st">"Vihara"</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>pura <span class="ot">&lt;-</span> saranaibadah <span class="sc">|&gt;</span> <span class="fu">filter</span>(REMARK <span class="sc">==</span> <span class="st">"Pura"</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>other_saranaibadah <span class="ot">&lt;-</span> saranaibadah <span class="sc">|&gt;</span> <span class="fu">filter</span>(REMARK <span class="sc">==</span> <span class="st">"Peribadatan/Sosial Lainnya"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>masjid_dist <span class="ot">&lt;-</span> <span class="fu">st_distance</span>(masjid)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>masjid_dist <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(masjid_dist)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>masjid_dist <span class="ot">&lt;-</span> <span class="fu">sapply</span>(masjid_dist, remove_unit)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>masjid_dist_med <span class="ot">&lt;-</span> <span class="fu">apply</span>(masjid_dist, <span class="dv">1</span>, median, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>masjid_dist_med <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(masjid_dist_med)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>masjid_med <span class="ot">&lt;-</span> <span class="fu">median</span>(masjid_dist_med<span class="sc">$</span>masjid_dist_med)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>gereja_dist <span class="ot">&lt;-</span> <span class="fu">st_distance</span>(gereja)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>gereja_dist <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(gereja_dist)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>gereja_dist <span class="ot">&lt;-</span> <span class="fu">sapply</span>(gereja_dist, remove_unit)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>gereja_dist_med <span class="ot">&lt;-</span> <span class="fu">apply</span>(gereja_dist, <span class="dv">1</span>, median, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>gereja_dist_med <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(gereja_dist_med)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>gereja_med <span class="ot">&lt;-</span> <span class="fu">median</span>(gereja_dist_med<span class="sc">$</span>gereja_dist_med)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>vihara_dist <span class="ot">&lt;-</span> <span class="fu">st_distance</span>(vihara)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>vihara_dist <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(vihara_dist)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>vihara_dist <span class="ot">&lt;-</span> <span class="fu">sapply</span>(vihara_dist, remove_unit)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>vihara_dist_med <span class="ot">&lt;-</span> <span class="fu">apply</span>(vihara_dist, <span class="dv">1</span>, median, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>vihara_dist_med <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(vihara_dist_med)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>vihara_med <span class="ot">&lt;-</span> <span class="fu">median</span>(vihara_dist_med<span class="sc">$</span>vihara_dist_med)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>pura_dist <span class="ot">&lt;-</span> <span class="fu">st_distance</span>(pura)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>pura_dist <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(pura_dist)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>pura_dist <span class="ot">&lt;-</span> <span class="fu">sapply</span>(pura_dist, remove_unit)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>pura_dist_med <span class="ot">&lt;-</span> <span class="fu">apply</span>(pura_dist, <span class="dv">1</span>, median, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>pura_dist_med <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(pura_dist_med)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>pura_med <span class="ot">&lt;-</span> <span class="fu">median</span>(pura_dist_med<span class="sc">$</span>pura_dist_med)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>other_saranaibadah_dist <span class="ot">&lt;-</span> <span class="fu">st_distance</span>(other_saranaibadah)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>other_saranaibadah_dist <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(other_saranaibadah_dist)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>other_saranaibadah_dist <span class="ot">&lt;-</span> <span class="fu">sapply</span>(other_saranaibadah_dist, remove_unit)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>other_saranaibadah_dist_med <span class="ot">&lt;-</span> <span class="fu">apply</span>(other_saranaibadah_dist, <span class="dv">1</span>, median, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>other_saranaibadah_dist_med <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(other_saranaibadah_dist_med)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>other_saranaibadah_med <span class="ot">&lt;-</span> <span class="fu">median</span>(other_saranaibadah_dist_med<span class="sc">$</span>other_saranaibadah_dist_med)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="combining-the-data-of-the-pois" class="level3">
+<h3 class="anchored" data-anchor-id="combining-the-data-of-the-pois">Combining the data of the POIs</h3>
+<p>After getting all the data of the POI, we will now combine them into one single dataframe</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>poi <span class="ot">&lt;-</span> <span class="fu">rbind</span>(airport, stasiunka, kesehatan, pendidikan, kantorpos, saranaibadah)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="distance-calculation" class="level3">
+<h3 class="anchored" data-anchor-id="distance-calculation">Distance Calculation</h3>
+<section id="calculating-the-distance-matrix-of-each-rental-unit-to-each-poi" class="level4">
+<h4 class="anchored" data-anchor-id="calculating-the-distance-matrix-of-each-rental-unit-to-each-poi">Calculating the distance matrix of each rental unit to each POI</h4>
+<p>In order to examine the influence of the POIs to the rent price of the rental units, we need to calculate the distance matrix between each of the rental units and each of the POIs. To find the distance, we can use st_distance() function from the sf package.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>distance <span class="ot">&lt;-</span> <span class="fu">st_distance</span>(mamikos_sf, poi)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>distance <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(distance)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(distance) <span class="ot">&lt;-</span> poi<span class="sc">$</span>REMARK</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(distance) <span class="ot">&lt;-</span> mamikos_sf<span class="sc">$</span><span class="st">`</span><span class="at">_id</span><span class="st">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>To make it easier for us to read and process the data, we need to remove the unit from the distance in the data frame and change the data type to numeric. We also need to pivot the data frame so that it can be easier for us to process the data when finding the minimum proximity to the POIs and the number of POIs within the median distance that we calculated earlier. We also save the data into an RDS file so that we can just call it when we want to use it in the future.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>distance <span class="ot">&lt;-</span> <span class="fu">sapply</span>(distance, rm_unit)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(distance) <span class="ot">&lt;-</span> mamikos_sf<span class="sc">$</span><span class="st">`</span><span class="at">_id</span><span class="st">`</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>distance <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(distance)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>distance<span class="sc">$</span>id <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">rownames</span>(distance))</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>distance_pair <span class="ot">&lt;-</span> distance <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="sc">!</span>id, <span class="at">names_to =</span> <span class="st">"POI"</span>, <span class="at">values_to =</span> <span class="st">"Distance"</span>)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(distance_pair, <span class="st">"rds/distance_pair.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="finding-the-nearest-distance-to-each-poi-for-each-rental-unit" class="level4">
+<h4 class="anchored" data-anchor-id="finding-the-nearest-distance-to-each-poi-for-each-rental-unit">Finding the nearest distance to each POI for each rental unit</h4>
+<p>In order to find the nearest distance to each POI for each rental unit, we can use the dplyr package to group the data by the rental unit id and the POI, then summarize the data by finding the minimum distance. We can also pivot the data so that it can be easier for us to process the data when we want to join it with the mamikos dataset. We also save the data into an RDS file so that we can just call it when we want to use it in the future.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>distance_min_prox <span class="ot">&lt;-</span> distance_pair <span class="sc">|&gt;</span> </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(id, POI) <span class="sc">|&gt;</span> </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">min_distance =</span> <span class="fu">min</span>(Distance)) <span class="sc">|&gt;</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> POI, <span class="at">values_from =</span> min_distance)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(distance_min_prox, <span class="st">"rds/distance_min_prox.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="counting-the-number-of-pois-within-the-median-distance-for-each-rental-unit" class="level4">
+<h4 class="anchored" data-anchor-id="counting-the-number-of-pois-within-the-median-distance-for-each-rental-unit">Counting the number of POIs within the median distance for each rental unit</h4>
+<p>To count the number of POIs within the median distance for each rental unit, we need to group by the id of each rental unit then use the <code>summarise()</code> function from the dplyr package to count the number of POIs within the median distance. We also save the data into an RDS file so that we can just call it when we want to use it in the future.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>distance_within <span class="ot">&lt;-</span> distance_pair <span class="sc">|&gt;</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(id) <span class="sc">|&gt;</span> </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">airport_within_10km =</span> <span class="fu">sum</span>(POI <span class="sc">==</span> <span class="st">"AIRPORT"</span> <span class="sc">&amp;</span> Distance <span class="sc">&lt;=</span> <span class="dv">10000</span>), </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">stasiunka_within_med =</span> <span class="fu">sum</span>(POI <span class="sc">==</span> <span class="st">"STASIUNKA"</span> <span class="sc">&amp;</span> Distance <span class="sc">&lt;=</span> stasiunka_med), </span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">kesehatan_within_med =</span> <span class="fu">sum</span>(POI <span class="sc">==</span> <span class="st">"KESEHATAN"</span> <span class="sc">&amp;</span> Distance <span class="sc">&lt;=</span> kesehatan_med), </span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">kantorpos_within_med =</span> <span class="fu">sum</span>(POI <span class="sc">==</span> <span class="st">"KANTORPOS"</span> <span class="sc">&amp;</span> Distance <span class="sc">&lt;=</span> kantorpos_med), </span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">masjid_within_med =</span> <span class="fu">sum</span>(POI <span class="sc">==</span> <span class="st">"Masjid"</span> <span class="sc">&amp;</span> Distance <span class="sc">&lt;=</span> masjid_med),</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">gereja_within_med =</span> <span class="fu">sum</span>(POI <span class="sc">==</span> <span class="st">"Gereja"</span> <span class="sc">&amp;</span> Distance <span class="sc">&lt;=</span> gereja_med),</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">vihara_within_med =</span> <span class="fu">sum</span>(POI <span class="sc">==</span> <span class="st">"Vihara"</span> <span class="sc">&amp;</span> Distance <span class="sc">&lt;=</span> vihara_med),</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">pura_within_med =</span> <span class="fu">sum</span>(POI <span class="sc">==</span> <span class="st">"Pura"</span> <span class="sc">&amp;</span> Distance <span class="sc">&lt;=</span> pura_med),</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">other_saranaibadah_within_med =</span> <span class="fu">sum</span>(POI <span class="sc">==</span> <span class="st">"Peribadatan/Sosial Lainnya"</span> <span class="sc">&amp;</span> Distance <span class="sc">&lt;=</span> other_saranaibadah_med),</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">pendidikan_within_med =</span> <span class="fu">sum</span>(POI <span class="sc">==</span> <span class="st">"PENDIDIKAN"</span> <span class="sc">&amp;</span> Distance <span class="sc">&lt;=</span> pendidikan_med))</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(distance_within, <span class="st">"rds/distance_within.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="combine-proximity-data-and-poi-count-data-with-the-mamikos-dataset" class="level4">
+<h4 class="anchored" data-anchor-id="combine-proximity-data-and-poi-count-data-with-the-mamikos-dataset">Combine proximity data and POI count data with the mamikos dataset</h4>
+<p>After finding the minimum proximity and the count of the POIs to each rental unit, we now combine these columns into the mamikos dataset to put it in our model.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>mamikos_full <span class="ot">&lt;-</span> <span class="fu">left_join</span>(mamikos_sf, distance_min_prox, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"_id"</span> <span class="ot">=</span> <span class="st">"id"</span>)) <span class="sc">|&gt;</span> <span class="fu">left_join</span>(distance_within, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"_id"</span> <span class="ot">=</span> <span class="st">"id"</span>))</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>mamikos_full <span class="ot">&lt;-</span> mamikos_full <span class="sc">|&gt;</span> </span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"PROX_AIRPORT"</span> <span class="ot">=</span> <span class="st">"AIRPORT"</span>, </span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>         <span class="st">"PROX_STASIUNKA"</span> <span class="ot">=</span> <span class="st">"STASIUNKA"</span>, </span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>         <span class="st">"PROX_KESEHATAN"</span> <span class="ot">=</span> <span class="st">"KESEHATAN"</span>, </span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>         <span class="st">"PROX_PENDIDIKAN"</span> <span class="ot">=</span> <span class="st">"PENDIDIKAN"</span>,</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>         <span class="st">"PROX_KANTORPOS"</span> <span class="ot">=</span> <span class="st">"KANTORPOS"</span>, </span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>         <span class="st">"PROX_MASJID"</span> <span class="ot">=</span> <span class="st">"Masjid"</span>, </span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>         <span class="st">"PROX_GEREJA"</span> <span class="ot">=</span> <span class="st">"Gereja"</span>, </span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>         <span class="st">"PROX_VIHARA"</span> <span class="ot">=</span> <span class="st">"Vihara"</span>, </span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>         <span class="st">"PROX_PURA"</span> <span class="ot">=</span> <span class="st">"Pura"</span>, </span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>         <span class="st">"PROX_OTHER_SARANAIBADAH"</span> <span class="ot">=</span> <span class="st">"Peribadatan/Sosial Lainnya"</span>, </span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>         <span class="st">"AIRPORT_WITHIN_10KM"</span> <span class="ot">=</span> <span class="st">"airport_within_10km"</span>, </span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>         <span class="st">"STASIUNKA_WITHIN_MED"</span> <span class="ot">=</span> <span class="st">"stasiunka_within_med"</span>, </span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>         <span class="st">"KESEHATAN_WITHIN_MED"</span> <span class="ot">=</span> <span class="st">"kesehatan_within_med"</span>, </span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>         <span class="st">"PENDIDIKAN_WITHIN_MED"</span> <span class="ot">=</span> <span class="st">"pendidikan_within_med"</span>, </span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>         <span class="st">"KANTORPOS_WITHIN_MED"</span> <span class="ot">=</span> <span class="st">"kantorpos_within_med"</span>, </span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>         <span class="st">"MASJID_WITHIN_MED"</span> <span class="ot">=</span> <span class="st">"masjid_within_med"</span>, </span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>         <span class="st">"GEREJA_WITHIN_MED"</span> <span class="ot">=</span> <span class="st">"gereja_within_med"</span>, </span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>         <span class="st">"VIHARA_WITHIN_MED"</span> <span class="ot">=</span> <span class="st">"vihara_within_med"</span>, </span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>         <span class="st">"PURA_WITHIN_MED"</span> <span class="ot">=</span> <span class="st">"pura_within_med"</span>, </span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>         <span class="st">"OTHER_SARANAIBADAH_WITHIN_MED"</span> <span class="ot">=</span> <span class="st">"other_saranaibadah_within_med"</span>)</span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(mamikos_full) <span class="ot">&lt;-</span> <span class="fu">tolower</span>(<span class="fu">names</span>(mamikos_full))</span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(mamikos_full, <span class="st">"rds/mamikos_full.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>mamikos_full <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"data/rds/mamikos_full.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+</section>
+<section id="exploratory-data-analysis-eda" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-data-analysis-eda">Exploratory Data Analysis (EDA)</h2>
+<section id="statistical-graphics" class="level3">
+<h3 class="anchored" data-anchor-id="statistical-graphics">Statistical Graphics</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mamikos_full, <span class="fu">aes</span>(<span class="at">x =</span> price_monthly)) <span class="sc">+</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill =</span> <span class="st">"#2caa4a"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Monthly Price Distribution"</span>,</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Monthly Price (IDR)"</span>,</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>You can see that the distribution of the selling price is right-skewed, with a long tail to the right. This skewed distribution is typical of real estate prices, where most of the properties are sold at a lower price, with a few sold at a much higher price.</p>
+<p>However, working with the raw selling price can be problematic, especially when the distribution is skewed. We can transform the selling price using the natural logarithm to make the distribution more symmetric.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>mamikos_full <span class="ot">&lt;-</span> mamikos_full <span class="sc">|&gt;</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">log_price =</span> <span class="fu">log</span>(price_monthly))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Now let’s plot the distribution of the log-transformed selling price.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mamikos_full, <span class="fu">aes</span>(<span class="at">x =</span> log_price)) <span class="sc">+</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill =</span> <span class="st">"#2caa4a"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Log-Transformed Monthly Price Distribution"</span>,</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Log Monthly Price (IDR)"</span>,</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Notice that the distribution of the log-transformed selling price is more symmetric compared to the raw selling price. This transformation will be useful when we calibrate the pricing model.</p>
+</section>
+<section id="visualizing-the-relationships-of-the-independent-variable" class="level3">
+<h3 class="anchored" data-anchor-id="visualizing-the-relationships-of-the-independent-variable">Visualizing the relationships of the independent variable</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>mamikos_no_geo <span class="ot">&lt;-</span> mamikos_full <span class="sc">|&gt;</span> </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">"x_id"</span>, <span class="st">"price_monthly"</span>))</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(<span class="fu">cor</span>(mamikos_no_geo),</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">diag =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">order =</span> <span class="st">"AOE"</span>,</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">tl.pos =</span> <span class="st">"td"</span>,</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">tl.cex =</span> <span class="fl">0.5</span>, </span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"number"</span>, </span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">type =</span> <span class="st">"upper"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid" width="1152"></p>
+</div>
+</div>
+<p>We can see that there are a lot of correlated variables in the dataset. For the sake of simplicity of this prototype, we will examine the <code>size</code>, <code>gender</code>, and <code>kesehatan_within_med</code> (places of worship) variables.</p>
+</section>
+<section id="multiple-histogram-plots-distribution-of-variables" class="level3">
+<h3 class="anchored" data-anchor-id="multiple-histogram-plots-distribution-of-variables">Multiple Histogram Plots distribution of variables</h3>
+<p>We will now draw a small multiples of histograms to visualise the distribution of the independent variables.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">"plot"</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>size_hist <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(mamikos_full, <span class="fu">aes</span>(<span class="at">x =</span> size)) <span class="sc">+</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill =</span> <span class="st">"#2caa4a"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Size Distribution"</span>,</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Size (m2)"</span>,</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>)</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>gender_hist <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(mamikos_full, <span class="fu">aes</span>(<span class="at">x =</span> gender)) <span class="sc">+</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">fill =</span> <span class="st">"#2caa4a"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Gender Distribution"</span>,</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Gender"</span>,</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>)</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>kesehatan_hist <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(mamikos_full, <span class="fu">aes</span>(<span class="at">x =</span> kesehatan_within_med)) <span class="sc">+</span></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">fill =</span> <span class="st">"#2caa4a"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Kesehatan Occurence Distribution"</span>,</span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Count of Health Facilities"</span>,</span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>)</span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a><span class="fu">ggarrange</span>(size_hist, gender_hist, kesehatan_hist, <span class="at">ncol =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid" width="960"></p>
+</div>
+</div>
+</section>
+<section id="drawing-statistical-point-map" class="level3">
+<h3 class="anchored" data-anchor-id="drawing-statistical-point-map">Drawing Statistical Point Map</h3>
+<p>Now we will draw a statistical point map to visualise the distribution of the log-transformed monthly price of the mamikos units. The code below will create a statistical point map using the tmap package.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(jakarta_sf)<span class="sc">+</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mamikos_full) <span class="sc">+</span>  </span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>(<span class="at">col =</span> <span class="st">"log_price"</span>,</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">alpha =</span> <span class="fl">0.6</span>,</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">style=</span><span class="st">"quantile"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-43-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="geographically-weighted-regression-gwr" class="level2">
+<h2 class="anchored" data-anchor-id="geographically-weighted-regression-gwr">Geographically Weighted Regression (GWR)</h2>
+<p>Now we will perform a Geographically Weighted Regression (GWR) with <strong>adaptive bandwidth</strong> to model the relationship between the monthly rental price of the units and the independent variables. We will use the <code>GWmodel</code> package to perform the GWR.</p>
+<section id="creating-a-spatialpointsdataframe" class="level3">
+<h3 class="anchored" data-anchor-id="creating-a-spatialpointsdataframe">Creating a SpatialPointsDataFrame</h3>
+<p>We will convert <code>mamikos_full</code> from simple feature object into a SpatialPointsDataFrame because spdep package can only process sp conformed spatial data objects.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>mamikos_sp <span class="ot">&lt;-</span> <span class="fu">as_Spatial</span>(mamikos_full)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="computing-the-bandwidth" class="level3">
+<h3 class="anchored" data-anchor-id="computing-the-bandwidth">Computing the Bandwidth</h3>
+<p>The first step in calibrating the GWR model is to compute the bandwidth. The bandwidth is a critical parameter in the GWR model as it determines the number of observations that will be used to calibrate the local regression model. Notice that the argument adaptive is set to FALSE indicates that we are interested to compute the fixed bandwidth.</p>
+<p>There are several methods to compute the bandwidth, they are: CV cross-validation approach and AIC corrected (AICc) approach. In this example, we will use the cross-validation (CV) method to compute the bandwidth. The CV method is a robust method to compute the bandwidth as it minimizes the prediction error of the GWR model.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>bw <span class="ot">&lt;-</span> <span class="fu">bw.gwr</span>(<span class="at">formula =</span> log_price <span class="sc">~</span> size <span class="sc">+</span> gender <span class="sc">+</span> kesehatan_within_med, </span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data=</span>mamikos_sp, </span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">approach=</span><span class="st">"CV"</span>, </span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">kernel=</span><span class="st">"gaussian"</span>, </span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">adaptive=</span><span class="cn">TRUE</span>, </span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">longlat=</span><span class="cn">FALSE</span>,</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">parallel.method =</span> <span class="st">"omp"</span>)</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(bw, <span class="st">"data/rds/bw.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The result shows that the optimal bandwidth is 19 neighbors. This means that the GWR model will use 19 observations to calibrate the local regression model for each observation in the dataset.</p>
+</section>
+<section id="calibrating-the-gwr-model" class="level3">
+<h3 class="anchored" data-anchor-id="calibrating-the-gwr-model">Calibrating the GWR Model</h3>
+<p>The code chunk below will calibrate the GWR model using the recommended bandwidth.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>gwr <span class="ot">&lt;-</span> <span class="fu">gwr.robust</span>(<span class="at">formula =</span> log_price <span class="sc">~</span> size <span class="sc">+</span> gender <span class="sc">+</span> kesehatan_within_med, </span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">data=</span>mamikos_sp, <span class="at">bw=</span>bw, </span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">kernel =</span> <span class="st">'gaussian'</span>, </span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">adaptive=</span><span class="cn">TRUE</span>, </span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">longlat =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>                          <span class="at">parallel.method =</span> <span class="st">"omp"</span>)</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(gwr, <span class="st">"data/rds/gwr.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="visualizing-gwr-output" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-gwr-output">Visualizing GWR Output</h2>
+<p>The output of the GWR model are stored in a SpatialPointsDataFrame or SpatialPolygonsDataFrame object integrated with fit.points, GWR coefficient estimates, y value, predicted values, coefficient standard errors and t-values in its “data” slot in an object called SDF of the output list.</p>
+<section id="converting-sdf-into-sf-data.frame" class="level3">
+<h3 class="anchored" data-anchor-id="converting-sdf-into-sf-data.frame">Converting SDF into sf data.frame</h3>
+<p>To visualize the fields in SDF, we need to first covert it into sf data.frame by using the code chunk below.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>gwr_sf <span class="ot">&lt;-</span> gwr<span class="sc">$</span>SDF <span class="sc">|&gt;</span> <span class="fu">st_as_sf</span>() <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="visualizing-local-r2" class="level3">
+<h3 class="anchored" data-anchor-id="visualizing-local-r2">Visualizing local R2</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>mamikos_palette <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">c</span>(<span class="st">"#f95516"</span>, <span class="st">"#dbdbdb"</span>, <span class="st">"#2caa4a"</span>))(<span class="dv">100</span>)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(jakarta_sf)<span class="sc">+</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(gwr_sf) <span class="sc">+</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>(<span class="at">col =</span> <span class="st">"Local_R2"</span>, </span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">style =</span> <span class="st">"quantile"</span>, </span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">palette =</span> mamikos_palette,</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="st">"Local R2"</span>,</span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">midpoint =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-50-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="visualizing-the-gwr-coefficients" class="level3">
+<h3 class="anchored" data-anchor-id="visualizing-the-gwr-coefficients">Visualizing the GWR Coefficients</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(jakarta_sf)<span class="sc">+</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(gwr_sf) <span class="sc">+</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>(<span class="at">col =</span> <span class="st">"size"</span>, </span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">style =</span> <span class="st">"quantile"</span>, </span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">palette =</span> mamikos_palette, </span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="st">"Size Coefficient"</span>,</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">midpoint =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-51-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="visualizing-the-gwr-standard-errors" class="level3">
+<h3 class="anchored" data-anchor-id="visualizing-the-gwr-standard-errors">Visualizing the GWR Standard Errors</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(jakarta_sf) <span class="sc">+</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(gwr_sf) <span class="sc">+</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>(<span class="at">col =</span> <span class="st">"size_SE"</span>, </span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">style =</span> <span class="st">"quantile"</span>, </span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">palette =</span> <span class="fu">rev</span>(mamikos_palette), </span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="st">"Size Standard Error"</span>,</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">midpoint =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-52-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="ui-design" class="level2">
+<h2 class="anchored" data-anchor-id="ui-design">UI Design</h2>
+<p>The UI design of the application is shown below:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="data/UI.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">UI Design</figcaption>
+</figure>
+</div>
+<p>The user will be able to choose the region, the variables that they are interested in to analyse, and the bandwidth. The graph will then be displayed accordingly to the user’s inputs.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
