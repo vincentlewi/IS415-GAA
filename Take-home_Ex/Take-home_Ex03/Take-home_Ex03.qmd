@@ -660,7 +660,6 @@ We can see that there are a lot of correlated variables in the dataset. For the 
 We will now draw a small multiples of histograms to visualise the distribution of the independent variables.
 
 ```{r, fig.width=10, fig.height=4}
-tmap_mode("plot")
 size_hist <- ggplot(mamikos_full, aes(x = size)) +
   geom_histogram(bins = 30, fill = "#2caa4a", color = "black") +
   labs(title = "Size Distribution",
@@ -687,12 +686,15 @@ ggarrange(size_hist, gender_hist, kesehatan_hist, ncol = 3)
 Now we will draw a statistical point map to visualise the distribution of the log-transformed monthly price of the mamikos units. The code below will create a statistical point map using the tmap package.
 
 ```{r}
+tmap_mode("view")
 tm_shape(jakarta_sf)+
   tm_polygons() +
 tm_shape(mamikos_full) +  
   tm_dots(col = "log_price",
           alpha = 0.6,
-          style="quantile")
+          style="quantile") +
+  tm_view(set.zoom.limits = c(11,14)) # Ensure that the map is always in the right zoom level
+tmap_mode("plot")
 ```
 
 ## Geographically Weighted Regression (GWR)
@@ -767,6 +769,7 @@ gwr_sf <- gwr$SDF |> st_as_sf() |> st_transform(crs = 4326)
 ```{r}
 mamikos_palette <- colorRampPalette(c("#f95516", "#dbdbdb", "#2caa4a"))(100)
 
+tmap_mode("view")
 tm_shape(jakarta_sf)+
   tm_polygons() +
 tm_shape(gwr_sf) +
@@ -774,12 +777,15 @@ tm_shape(gwr_sf) +
           style = "quantile", 
           palette = mamikos_palette,
           title = "Local R2",
-          midpoint = 0)
+          midpoint = 0) +
+  tm_view(set.zoom.limits = c(11,14))
+tmap_mode("plot")
 ```
 
 ### Visualizing the GWR Coefficients
 
 ```{r}
+tmap_mode("view")
 tm_shape(jakarta_sf)+
   tm_polygons() +
 tm_shape(gwr_sf) +
@@ -787,20 +793,25 @@ tm_shape(gwr_sf) +
           style = "quantile", 
           palette = mamikos_palette, 
           title = "Size Coefficient",
-          midpoint = 0)
+          midpoint = 0) +
+  tm_view(set.zoom.limits = c(11,14))
+tmap_mode("plot")
 ```
 
 ### Visualizing the GWR Standard Errors
 
 ```{r}
-tm_shape(jakarta_sf) +
+tmap_mode("view")
+tm_shape(jakarta_sf)+
   tm_polygons() +
 tm_shape(gwr_sf) +
   tm_dots(col = "size_SE", 
           style = "quantile", 
           palette = rev(mamikos_palette), 
           title = "Size Standard Error",
-          midpoint = 0)
+          midpoint = 0) +
+  tm_view(set.zoom.limits = c(11,14))
+tmap_mode("plot")
 ```
 
 ## UI Design
